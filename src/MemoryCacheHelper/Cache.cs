@@ -15,7 +15,7 @@ namespace MemoryCacheHelper
         /// <summary>
         /// Internal instance of the <see cref="MemoryCache"/> class
         /// </summary>
-        private MemoryCache memoryCache;
+        private MemoryCache _memoryCache;
 
         /// <summary>
         /// Locker collection of all cache keys currently having their 'expensive functions' evaluated
@@ -32,7 +32,7 @@ namespace MemoryCacheHelper
         /// </summary>
         private Cache()
         {
-            this.memoryCache = new MemoryCache(Guid.NewGuid().ToString());
+            this._memoryCache = new MemoryCache(Guid.NewGuid().ToString());
 
             this.cacheKeysBeingHandled = new ConcurrentDictionary<string, object>();
         }
@@ -70,7 +70,7 @@ namespace MemoryCacheHelper
         /// <returns>an object from cache of type T, else default(T)</returns>
         public T Get<T>(string cacheKey, out bool found)
         {
-            object obj = this.memoryCache[cacheKey];
+            object obj = this._memoryCache[cacheKey];
 
             if (obj is T)
             {
@@ -130,14 +130,14 @@ namespace MemoryCacheHelper
             {
                 if (timeout > 0)
                 {
-                    this.memoryCache.Set(
+                    this._memoryCache.Set(
                         cacheKey,
                         objectToCache,
                         new CacheItemPolicy() { AbsoluteExpiration = DateTime.Now.AddSeconds(timeout) });
                 }
                 else
                 {
-                    this.memoryCache[cacheKey] = objectToCache;
+                    this._memoryCache[cacheKey] = objectToCache;
                 }
             }
         }
@@ -148,7 +148,7 @@ namespace MemoryCacheHelper
         /// <param name="cacheKey">the key to the item to remove</param>
         public void Remove(string cacheKey)
         {
-            this.memoryCache.Remove(cacheKey);
+            this._memoryCache.Remove(cacheKey);
         }
 
         /// <summary>
@@ -157,13 +157,34 @@ namespace MemoryCacheHelper
         /// <param name="lambda">function to test a string cache key, and return true if it should be removed from cache</param>
         public void Remove(Func<string, bool> lambda)
         {
-            foreach (string key in this.memoryCache.Select(x => x.Key))
+            foreach (string key in this._memoryCache.Select(x => x.Key))
             {
                 if (lambda(key))
                 {
-                    this.memoryCache.Remove(key);
+                    this._memoryCache.Remove(key);
                 }
             }
         }
+
+        /// <summary>
+        /// wipe all cache items
+        /// </summary>
+        internal void Wipe()
+        {
+            foreach (var key in this._memoryCache.Select(x => x.Key))
+            {
+                this._memoryCache.Remove(key);
+            }
+        }
+
+        /// <summary>
+        /// helper method for unit tests
+        /// </summary>
+        /// <returns>true if the local cache is empty</returns>
+        internal bool IsEmpty()
+        {
+            return !this._memoryCache.Any();
+        }
+
     }
 }
