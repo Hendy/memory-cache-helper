@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2042
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemoryCacheHelper", "MemoryCacheHelper\MemoryCacheHelper.csproj", "{0CFD2CF9-56A0-41B4-B1A9-05E6A9C1C0EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemoryCacheHelper.Tests", "MemoryCacheHelper.Tests\MemoryCacheHelper.Tests.csproj", "{D4EB7D33-014A-4744-BB6B-A7BCF4B3D688}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9DF0E43F-3BB6-4D9C-899D-633E4A271902}"
+	ProjectSection(SolutionItems) = preProject
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{7FF0EF52-2176-4101-B73A-8384383B5113}"
+	ProjectSection(SolutionItems) = preProject
+		..\build\Package.nuspec = ..\build\Package.nuspec
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0CFD2CF9-56A0-41B4-B1A9-05E6A9C1C0EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CFD2CF9-56A0-41B4-B1A9-05E6A9C1C0EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CFD2CF9-56A0-41B4-B1A9-05E6A9C1C0EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CFD2CF9-56A0-41B4-B1A9-05E6A9C1C0EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4EB7D33-014A-4744-BB6B-A7BCF4B3D688}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4EB7D33-014A-4744-BB6B-A7BCF4B3D688}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4EB7D33-014A-4744-BB6B-A7BCF4B3D688}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4EB7D33-014A-4744-BB6B-A7BCF4B3D688}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7FF0EF52-2176-4101-B73A-8384383B5113} = {9DF0E43F-3BB6-4D9C-899D-633E4A271902}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6978238B-422C-4444-911D-AC0C9075791F}
+	EndGlobalSection
+EndGlobal

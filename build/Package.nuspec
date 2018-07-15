@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>MemoryCacheHelper</id>
+    <version>0.1.0</version>
+    <authors>Hendy Racher</authors>
+    <owners>Hendy Racher</owners>
+    <licenseUrl>https://github.com/Hendy/memory-cache-helper/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/Hendy/memory-cache-helper</projectUrl>
+    <!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Thread safe memory cache helper methods</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2018</copyright>
+    <tags>MemoryCache</tags>
+    <dependencies></dependencies>
+  </metadata>
+  <files>
+    <file src="..\src\MemoryCacheHelper\bin\Release\MemoryCacheHelper.dll" target="lib\net45"></file>
+  </files>
+</package>
