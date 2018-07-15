@@ -5,12 +5,12 @@ using System.Runtime.Caching;
 
 namespace MemoryCacheHelper
 {
-    public sealed class Cache
+    public sealed class MemoryCacheHelper
     {
         /// <summary>
-        /// Singleton instance of the <see cref="Cache"/> class
+        /// Singleton instance of the <see cref="MemoryCacheHelper"/> class
         /// </summary>
-        private static readonly Lazy<Cache> _lazy = new Lazy<Cache>(() => new Cache());
+        private static readonly Lazy<MemoryCacheHelper> _lazy = new Lazy<MemoryCacheHelper>(() => new MemoryCacheHelper());
 
         /// <summary>
         /// Internal instance of the <see cref="MemoryCache"/> class
@@ -26,7 +26,7 @@ namespace MemoryCacheHelper
         /// <summary>
         /// Private constructor
         /// </summary>
-        private Cache()
+        private MemoryCacheHelper()
         {
             this._memoryCache = new MemoryCache(Guid.NewGuid().ToString());
 
@@ -36,7 +36,7 @@ namespace MemoryCacheHelper
         /// <summary>
         /// Get the instance of this cache
         /// </summary>
-        public static Cache Instance => _lazy.Value;
+        public static MemoryCacheHelper Instance => _lazy.Value;
 
         /// <summary>
         /// Queries key in cache for object of type T
