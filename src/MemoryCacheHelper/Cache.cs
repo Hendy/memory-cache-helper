@@ -10,7 +10,7 @@ namespace MemoryCacheHelper
         /// <summary>
         /// Singleton instance of the <see cref="Cache"/> class
         /// </summary>
-        private static readonly Cache cache = new Cache();
+        private static readonly Lazy<Cache> _lazy = new Lazy<Cache>(() => new Cache());
 
         /// <summary>
         /// Internal instance of the <see cref="MemoryCache"/> class
@@ -22,10 +22,6 @@ namespace MemoryCacheHelper
         /// string = cacheKey, object = used as a locking object
         /// </summary>
         private ConcurrentDictionary<string, object> _cacheKeysBeingHandled;
-
-        static Cache()
-        {
-        }
 
         /// <summary>
         /// Private constructor
@@ -40,13 +36,7 @@ namespace MemoryCacheHelper
         /// <summary>
         /// Get the instance of this cache
         /// </summary>
-        public static Cache Instance
-        {
-            get
-            {
-                return cache;
-            }
-        }
+        public static Cache Instance => _lazy.Value;
 
         /// <summary>
         /// Queries key in cache for object of type T
