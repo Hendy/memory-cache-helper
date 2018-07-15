@@ -5,17 +5,17 @@ using System.Runtime.Caching;
 
 namespace MemoryCacheHelper
 {
-    public sealed class MemoryCacheHelper
+    public sealed class MemoryCache
     {
         /// <summary>
-        /// Singleton instance of the <see cref="MemoryCacheHelper"/> class
+        /// Singleton instance of the <see cref="MemoryCache"/> class
         /// </summary>
-        private static readonly Lazy<MemoryCacheHelper> _lazy = new Lazy<MemoryCacheHelper>(() => new MemoryCacheHelper());
+        private static readonly Lazy<MemoryCache> _lazy = new Lazy<MemoryCache>(() => new MemoryCache());
 
         /// <summary>
-        /// Internal instance of the <see cref="MemoryCache"/> class
+        /// Internal instance of the <see cref="System.Runtime.Caching.MemoryCache"/> class
         /// </summary>
-        private MemoryCache _memoryCache;
+        private System.Runtime.Caching.MemoryCache _memoryCache;
 
         /// <summary>
         /// Locker collection of all cache keys currently having their 'expensive functions' evaluated
@@ -26,9 +26,9 @@ namespace MemoryCacheHelper
         /// <summary>
         /// Private constructor
         /// </summary>
-        private MemoryCacheHelper()
+        private MemoryCache()
         {
-            this._memoryCache = new MemoryCache(Guid.NewGuid().ToString());
+            this._memoryCache = new System.Runtime.Caching.MemoryCache(Guid.NewGuid().ToString());
 
             this._cacheKeysBeingHandled = new ConcurrentDictionary<string, object>();
         }
@@ -36,7 +36,7 @@ namespace MemoryCacheHelper
         /// <summary>
         /// Get the instance of this cache
         /// </summary>
-        public static MemoryCacheHelper Instance => _lazy.Value;
+        public static MemoryCache Instance => _lazy.Value;
 
         /// <summary>
         /// Helper for unit tests to expose the memory cache name
