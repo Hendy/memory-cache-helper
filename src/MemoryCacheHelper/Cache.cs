@@ -21,7 +21,7 @@ namespace MemoryCacheHelper
         /// Locker collection of all cache keys currently having their 'expensive functions' evaluated
         /// string = cacheKey, object = used as a locking object
         /// </summary>
-        private ConcurrentDictionary<string, object> cacheKeysBeingHandled;
+        private ConcurrentDictionary<string, object> _cacheKeysBeingHandled;
 
         static Cache()
         {
@@ -34,7 +34,7 @@ namespace MemoryCacheHelper
         {
             this._memoryCache = new MemoryCache(Guid.NewGuid().ToString());
 
-            this.cacheKeysBeingHandled = new ConcurrentDictionary<string, object>();
+            this._cacheKeysBeingHandled = new ConcurrentDictionary<string, object>();
         }
 
         /// <summary>
@@ -97,9 +97,9 @@ namespace MemoryCacheHelper
 
             if (!found)
             {
-                this.cacheKeysBeingHandled.TryAdd(cacheKey, new object()); // object used as a locker
+                this._cacheKeysBeingHandled.TryAdd(cacheKey, new object()); // object used as a locker
 
-                lock (this.cacheKeysBeingHandled[cacheKey])
+                lock (this._cacheKeysBeingHandled[cacheKey])
                 {
                     // re-check to see if another thread beat us to setting this value
                     cachedObject = this.Get<T>(cacheKey, out found);
@@ -112,7 +112,7 @@ namespace MemoryCacheHelper
                 }
 
                 object obj;
-                this.cacheKeysBeingHandled.TryRemove(cacheKey, out obj);
+                this._cacheKeysBeingHandled.TryRemove(cacheKey, out obj);
             }
 
             return cachedObject;
