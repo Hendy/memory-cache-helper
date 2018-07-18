@@ -9,7 +9,7 @@
     <projectUrl>https://github.com/Hendy/memory-cache-helper</projectUrl>
     <!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Thread safe memory cache helper methods</description>
+    <description>Thread safe helper methods for interacting with a single memory cache instance</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>MemoryCache</tags>

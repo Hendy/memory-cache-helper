@@ -3,6 +3,9 @@ using System.Threading;
 
 namespace MemoryCacheHelper.Tests
 {
+    /// <summary>
+    /// Testing the singleton
+    /// </summary>
     [TestClass]
     public class InstanceTests
     {
@@ -17,7 +20,7 @@ namespace MemoryCacheHelper.Tests
         }
 
         [TestMethod]
-        public void EnsureSameInstance_DifferentThreads()
+        public void Ensure_Same_Instance_Between_Threads()
         {
             var thread1 = new Thread(() => {
 
@@ -44,7 +47,7 @@ namespace MemoryCacheHelper.Tests
         }
 
         [TestMethod]
-        public void EnsureSameInstance_DifferentVariables()
+        public void Ensure_Same_Instance_Between_Variables()
         {
             var variable1 = MemoryCache.Instance;
             var variable2 = MemoryCache.Instance;
