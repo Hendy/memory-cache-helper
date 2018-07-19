@@ -1,8 +1,8 @@
 # MemoryCacheHelper
 
-The benefit of this library
+This library exposes helper methods on a memory cache via a singleton, notably the .GetSet&lt;T&gt;(string key, Func&lt;T&gt; expensiveFunction) which is thread safe in that it locks (on a per key basis) ensuring any expensive functions to populate a cache key would only executed once.
 
-    @using MemoryCacheHelper
+	@using MemoryCacheHelper
 
 	// set some typed value with (optional) timeout
 	MemoryCache.Instance.Set("key", "value", 60);
@@ -11,7 +11,6 @@ The benefit of this library
 	var value = MemoryCache.Instance.Get<string>("key"); 
 
 	// cache some expensive function that returns MyObject with (optional) timeout
-	// this is 'thread safe' in that cache locks (on per key basis) ensuring the expensive function only called once
 	var myObject = MemoryCache.Instance.GetSet<MyObject>("myKey", () => {	  
 	  return new MyObject();
 	}, 60);
