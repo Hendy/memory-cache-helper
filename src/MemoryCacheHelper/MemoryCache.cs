@@ -43,6 +43,15 @@ namespace MemoryCacheHelper
         /// </summary>
         public string Name => this._memoryCache.Name;
 
+        /// <summary>
+        /// See if the cache contains a specific cache key
+        /// </summary>
+        /// <param name="cacheKey">the cache key to look for</param>
+        /// <returns>true if the supplied cache key was found</returns>
+        public bool HasKey(string cacheKey)
+        {
+            return this._memoryCache[cacheKey] != null;
+        }
 
         /// <summary>
         /// Queries key in cache for object of type T
