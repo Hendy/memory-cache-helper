@@ -16,6 +16,12 @@ namespace MemoryCacheHelper.Tests
         }
 
         [TestMethod]
+        public void Remove_Unknown_Key()
+        {
+            MemoryCache.Instance.Remove(KEY);
+        }
+
+        [TestMethod]
         public void Remove_By_Lambda()
         {
             for(int i = 0; i < 10; i ++)

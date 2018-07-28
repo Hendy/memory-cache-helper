@@ -124,15 +124,17 @@ namespace MemoryCacheHelper
         }
 
         /// <summary>
-        /// Populate the cache key with the supplied object
+        /// Populate the cache key with the supplied object - supplying null will remove cache item
         /// </summary>
         /// <param name="cacheKey">key for the cache item to set</param>
-        /// <param name="objectToCache">object to put into the cache item</param>
+        /// <param name="objectToCache">object to put into the cache item, null will remove cache item</param>
         /// <param name="timeout">(optional) number of seconds before cache value should time out, default 0 = no timeout</param>
         public void Set(string cacheKey, object objectToCache, int timeout = 0)
         {
             if (objectToCache != null)
             {
+                // TODO: cancel any existing expensive function that may be setting this key (as we have object ready to cache here)
+ 
                 if (timeout > 0)
                 {
                     this._memoryCache.Set(
@@ -144,6 +146,10 @@ namespace MemoryCacheHelper
                 {
                     this._memoryCache[cacheKey] = objectToCache;
                 }
+            }
+            else
+            {
+                this.Remove(cacheKey);
             }
         }
 
