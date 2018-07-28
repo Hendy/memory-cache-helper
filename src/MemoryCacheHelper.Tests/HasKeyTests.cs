@@ -11,8 +11,6 @@ namespace MemoryCacheHelper.Tests
         public void Initialize()
         {
             MemoryCache.Instance.Wipe();
-
-            Assert.IsTrue(MemoryCache.Instance.IsEmpty());
         }
 
         [TestMethod]
