@@ -3,7 +3,7 @@
 namespace MemoryCacheHelper.Tests
 {
     [TestClass]
-    public class GetSetRemoveTests
+    public class GetSetTests
     {
         private const string KEY = "exampleCacheKey";
 
@@ -11,8 +11,6 @@ namespace MemoryCacheHelper.Tests
         public void Initialize()
         {
             MemoryCache.Instance.Wipe();
-
-            Assert.IsTrue(MemoryCache.Instance.IsEmpty());
         }
 
         [TestMethod]
@@ -59,21 +57,6 @@ namespace MemoryCacheHelper.Tests
             var output = MemoryCache.Instance.Get<string>(KEY);
 
             Assert.IsNull(output);
-        }
-
-        [TestMethod]
-        public void Remove_By_Lambda()
-        {
-            for(int i = 0; i < 10; i ++)
-            {
-                MemoryCache.Instance.Set(KEY + i.ToString(), true);
-            }
-
-            Assert.IsFalse(MemoryCache.Instance.IsEmpty());
-
-            MemoryCache.Instance.Remove(x => x.StartsWith(KEY));
-
-            Assert.IsTrue(MemoryCache.Instance.IsEmpty());
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 
@@ -39,9 +40,28 @@ namespace MemoryCacheHelper
         public static MemoryCache Instance => _lazy.Value;
 
         /// <summary>
-        /// Helper for unit tests to expose the memory cache name
+        /// The unique name of this memory cache
         /// </summary>
-        internal string Name => this._memoryCache.Name;
+        public string Name => this._memoryCache.Name;
+
+        /// <summary>
+        /// See if the cache contains a specific cache key
+        /// </summary>
+        /// <param name="cacheKey">the cache key to look for</param>
+        /// <returns>true if the supplied cache key was found</returns>
+        public bool HasKey(string cacheKey)
+        {
+            return this._memoryCache[cacheKey] != null;
+        }
+
+        /// <summary>
+        /// Enumerates sorting the collection of cache keys
+        /// </summary>
+        /// <returns></returns>
+        internal IEnumerable<string> GetOrderedKeys()
+        {
+            return this._memoryCache.Select(x => x.Key).OrderBy(x => x);
+        }
 
         /// <summary>
         /// Queries key in cache for object of type T
@@ -114,15 +134,17 @@ namespace MemoryCacheHelper
         }
 
         /// <summary>
-        /// Populate the cache key with the supplied object
+        /// Populate the cache key with the supplied object - supplying null will remove cache item
         /// </summary>
         /// <param name="cacheKey">key for the cache item to set</param>
-        /// <param name="objectToCache">object to put into the cache item</param>
+        /// <param name="objectToCache">object to put into the cache item, null will remove cache item</param>
         /// <param name="timeout">(optional) number of seconds before cache value should time out, default 0 = no timeout</param>
         public void Set(string cacheKey, object objectToCache, int timeout = 0)
         {
             if (objectToCache != null)
             {
+                // TODO: cancel any existing expensive function that may be setting this key (as we have object ready to cache here)
+ 
                 if (timeout > 0)
                 {
                     this._memoryCache.Set(
@@ -134,6 +156,10 @@ namespace MemoryCacheHelper
                 {
                     this._memoryCache[cacheKey] = objectToCache;
                 }
+            }
+            else
+            {
+                this.Remove(cacheKey);
             }
         }
 

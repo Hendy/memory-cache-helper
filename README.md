@@ -4,7 +4,7 @@ This library exposes helper methods on a memory cache via a singleton, notably t
 
 	@using MemoryCacheHelper
 
-	// set some typed value with (optional) timeout
+	// set some typed value with (optional) timeout in seconds
 	MemoryCache.Instance.Set("key", "value", 60);
 
 	// get some typed value
