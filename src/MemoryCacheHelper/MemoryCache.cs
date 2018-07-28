@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 
@@ -51,6 +52,15 @@ namespace MemoryCacheHelper
         public bool HasKey(string cacheKey)
         {
             return this._memoryCache[cacheKey] != null;
+        }
+
+        /// <summary>
+        /// Enumerates sorting the collection of cache keys
+        /// </summary>
+        /// <returns></returns>
+        internal IEnumerable<string> GetOrderedKeys()
+        {
+            return this._memoryCache.Select(x => x.Key).OrderBy(x => x);
         }
 
         /// <summary>
