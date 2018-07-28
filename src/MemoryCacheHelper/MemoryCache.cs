@@ -39,9 +39,10 @@ namespace MemoryCacheHelper
         public static MemoryCache Instance => _lazy.Value;
 
         /// <summary>
-        /// Helper for unit tests to expose the memory cache name
+        /// The unique name of this memory cache
         /// </summary>
-        internal string Name => this._memoryCache.Name;
+        public string Name => this._memoryCache.Name;
+
 
         /// <summary>
         /// Queries key in cache for object of type T

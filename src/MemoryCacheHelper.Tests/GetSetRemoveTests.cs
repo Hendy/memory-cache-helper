@@ -66,7 +66,9 @@ namespace MemoryCacheHelper.Tests
         {
             for(int i = 0; i < 10; i ++)
             {
-                MemoryCache.Instance.Set(KEY + i.ToString(), true);
+                var uniqueKey = KEY + i.ToString();
+
+                MemoryCache.Instance.Set(uniqueKey, true);
             }
 
             Assert.IsFalse(MemoryCache.Instance.IsEmpty());
