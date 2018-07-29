@@ -29,27 +29,37 @@ namespace MemoryCacheHelper
                     cachedObject = this.Get<T>(cacheKey, out found);
                     if (!found)
                     {
+                        // put the expensive function into it's own thread (so it can be cancelled)
                         this._cacheKeysBeingHandled[cacheKey].ExpensiveFunctionThread = new Thread(() => {
+
+                            var aborted = false;
+
                             try
                             {
                                 cachedObject = expensiveFunction();
                             }
                             catch (ThreadAbortException)
                             {
-                                // the thread was aborted becuase something else changed the cache key this long running function was trying to set
-                                cachedObject = this.Get<T>(cacheKey);
+                                aborted = true;
                             }
                             finally
                             {
-                                if (cachedObject == null)
-                                {
-                                    // doesn't go via this.Remove method, else it'd suspend itself
-                                    this._memoryCache.Remove(cacheKey);
+                                if (aborted)
+                                {                                    
+                                    cachedObject = this.Get<T>(cacheKey);
                                 }
                                 else
                                 {
-                                    // doesn't go via this.Set method, else it'd suspend itself
-                                    this._memoryCache[cacheKey] = cachedObject;
+                                    if (cachedObject == null)
+                                    {
+                                        // doesn't go via this.Remove method, else it'd abort itself !
+                                        this._memoryCache.Remove(cacheKey);
+                                    }
+                                    else
+                                    {
+                                        // doesn't go via this.Set method, else it'd abort itself !
+                                        this._memoryCache[cacheKey] = cachedObject;
+                                    }
                                 }
                             }
                         });

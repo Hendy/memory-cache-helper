@@ -13,11 +13,8 @@ namespace MemoryCacheHelper
         {
             if (this._cacheKeysBeingHandled.TryGetValue(cacheKey, out CacheKeyBeingHandled cacheKeyBeingHandled))
             {
-                cacheKeyBeingHandled.ExpensiveFunctionThread.Suspend();
-
                 this._memoryCache.Remove(cacheKey);
 
-                cacheKeyBeingHandled.ExpensiveFunctionThread.Resume();
                 cacheKeyBeingHandled.ExpensiveFunctionThread.Abort();
             }
             else

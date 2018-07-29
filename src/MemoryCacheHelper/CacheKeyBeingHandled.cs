@@ -2,6 +2,9 @@
 
 namespace MemoryCacheHelper
 {
+    /// <summary>
+    /// Respresents the setting state of a single cache item
+    /// </summary>
     internal class CacheKeyBeingHandled
     {
         /// <summary>
