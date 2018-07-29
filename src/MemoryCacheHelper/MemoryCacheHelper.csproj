@@ -49,6 +49,7 @@
     <Compile Include="MemoryCache_Instance.cs" />
     <Compile Include="MemoryCache_Remove.cs" />
     <Compile Include="MemoryCache_Set.cs" />
+    <Compile Include="MemoryCache_Wipe.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

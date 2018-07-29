@@ -8,14 +8,8 @@ namespace MemoryCacheHelper
     {
         /// <summary>
         /// Locker collection of all cache keys currently having their 'expensive functions' evaluated
-        /// string = cacheKey, object = used as a locking object
         /// </summary>
         private ConcurrentDictionary<string, CacheKeyBeingHandled> _cacheKeysBeingHandled;
-
-        /// <summary>
-        /// locker for the wipe method (no need to have them running concurrently)
-        /// </summary>
-        private object _wipeLock = new object();
 
         /// <summary>
         /// Internal instance of the <see cref="System.Runtime.Caching.MemoryCache"/> class
@@ -30,23 +24,6 @@ namespace MemoryCacheHelper
         internal IEnumerable<string> GetOrderedKeys()
         {
             return this._memoryCache.Select(x => x.Key).OrderBy(x => x);
-        }
-
-        /// <summary>
-        /// Wipe all cache items
-        /// </summary>
-        internal void Wipe()
-        {
-            lock(this._wipeLock)
-            {
-                if (!this.IsEmpty())
-                {
-                    foreach (var key in this._memoryCache.Select(x => x.Key))
-                    {
-                        this.Remove(key);
-                    }
-                }
-            }
         }
 
         /// <summary>
