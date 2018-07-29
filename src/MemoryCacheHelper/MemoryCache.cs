@@ -15,6 +15,11 @@ namespace MemoryCacheHelper
         private ConcurrentDictionary<string, CacheKeyBeingHandled> _cacheKeysBeingHandled;
 
         /// <summary>
+        /// locker for the wipe method (no need to have them running concurrently)
+        /// </summary>
+        private object _wipeLock = new object();
+
+        /// <summary>
         /// Internal instance of the <see cref="System.Runtime.Caching.MemoryCache"/> class
         /// </summary>
         private System.Runtime.Caching.MemoryCache _memoryCache;
@@ -102,9 +107,15 @@ namespace MemoryCacheHelper
         /// </summary>
         internal void Wipe()
         {
-            foreach (var key in this._memoryCache.Select(x => x.Key))
+            lock(this._wipeLock)
             {
-                this.Remove(key);
+                if (!this.IsEmpty())
+                {
+                    foreach (var key in this._memoryCache.Select(x => x.Key))
+                    {
+                        this.Remove(key);
+                    }
+                }
             }
         }
 

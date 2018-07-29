@@ -29,6 +29,8 @@ namespace MemoryCacheHelper.Tests
 
             });
 
+            //while (!started) { }
+
             Thread.Sleep(100); // allow time for the expensive func to start
 
             Assert.IsTrue(started);

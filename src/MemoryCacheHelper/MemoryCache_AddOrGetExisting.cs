@@ -21,6 +21,8 @@ namespace MemoryCacheHelper
 
             if (!found)
             {
+                //TODO: prevent a write if currenlty being wiped
+
                 this._cacheKeysBeingHandled.TryAdd(cacheKey, new CacheKeyBeingHandled()); // TODO: handle unexpected fails to add
 
                 lock (this._cacheKeysBeingHandled[cacheKey].Lock)

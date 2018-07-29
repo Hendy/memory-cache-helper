@@ -9,6 +9,8 @@
         /// <param name="objectToCache">the object to cache</param>
         public void Set(string cacheKey, object objectToCache)
         {
+            // TODO: prevent a write if a wipe is currently taking place
+
             if (objectToCache != null)
             {
                 if (this._cacheKeysBeingHandled.TryGetValue(cacheKey, out CacheKeyBeingHandled cacheKeyBeingHandled))
