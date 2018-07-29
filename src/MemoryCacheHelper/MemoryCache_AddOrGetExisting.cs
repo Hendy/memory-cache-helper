@@ -34,7 +34,7 @@ namespace MemoryCacheHelper
                     if (!found)
                     {
                         // put the expensive function into it's own thread (so it can be cancelled)
-                        this._cacheKeysBeingHandled[key].ExpensiveFunctionThread = new Thread(() => {
+                        this._cacheKeysBeingHandled[key].ValueFunctionThread = new Thread(() => {
 
                             var aborted = false;
 
@@ -75,8 +75,8 @@ namespace MemoryCacheHelper
                             }
                         });
 
-                        this._cacheKeysBeingHandled[key].ExpensiveFunctionThread.Start();
-                        this._cacheKeysBeingHandled[key].ExpensiveFunctionThread.Join();
+                        this._cacheKeysBeingHandled[key].ValueFunctionThread.Start();
+                        this._cacheKeysBeingHandled[key].ValueFunctionThread.Join();
                     }
                 }
 

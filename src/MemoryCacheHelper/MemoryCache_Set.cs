@@ -27,7 +27,7 @@ namespace MemoryCacheHelper
                 // abort any expensive funcs attempting to set this key
                 if (this._cacheKeysBeingHandled.TryGetValue(key, out CacheKeyBeingHandled cacheKeyBeingHandled))
                 {
-                    cacheKeyBeingHandled.ExpensiveFunctionThread.Abort();
+                    cacheKeyBeingHandled.ValueFunctionThread.Abort();
                 }
             }
             else

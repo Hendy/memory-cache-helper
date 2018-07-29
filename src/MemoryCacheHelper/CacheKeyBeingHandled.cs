@@ -15,6 +15,6 @@ namespace MemoryCacheHelper
         /// <summary>
         /// Handle to thread running consumer function
         /// </summary>
-        internal Thread ExpensiveFunctionThread { get; set; }
+        internal Thread ValueFunctionThread { get; set; }
     }
 }

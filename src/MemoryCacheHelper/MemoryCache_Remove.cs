@@ -15,7 +15,7 @@ namespace MemoryCacheHelper
             {
                 this._memoryCache.Remove(key);
 
-                cacheKeyBeingHandled.ExpensiveFunctionThread.Abort();
+                cacheKeyBeingHandled.ValueFunctionThread.Abort();
             }
             else
             {
