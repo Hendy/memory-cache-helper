@@ -11,16 +11,12 @@ namespace MemoryCacheHelper
         /// <param name="key">the key to the item to remove</param>
         public void Remove(string key)
         {
+            this._memoryCache.Remove(key);
+
             if (this._cacheKeysBeingHandled.TryGetValue(key, out CacheKeyBeingHandled cacheKeyBeingHandled))
             {
-                this._memoryCache.Remove(key);
-
                 cacheKeyBeingHandled.ValueFunctionThread.Abort();
             }
-            else
-            {
-                this._memoryCache.Remove(key);
-            }         
         }
 
         /// <summary>

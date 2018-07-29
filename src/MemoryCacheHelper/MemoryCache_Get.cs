@@ -24,12 +24,12 @@
         /// <returns>an object from cache of type T, else default(T)</returns>
         public T Get<T>(string key, out bool found)
         {
-            object obj = this._memoryCache[key];
+            object value = this._memoryCache[key];
 
-            if (obj is T)
+            if (value is T)
             {
                 found = true;
-                return (T)obj;
+                return (T)value;
             }
 
             found = false;
