@@ -3,16 +3,8 @@
 namespace MemoryCacheHelper.Tests
 {
     [TestClass]
-    public class GetSetTests
+    public class GetSetTests : BaseTests
     {
-        private const string KEY = "exampleCacheKey";
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            MemoryCache.Instance.Wipe();
-        }
-
         [TestMethod]
         public void Get_String_Unknown_Key()
         {

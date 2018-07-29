@@ -4,10 +4,8 @@ using System.Linq;
 namespace MemoryCacheHelper.Tests
 {
     [TestClass]
-    public class WipeTests
+    public class WipeTests : BaseTests
     {
-        private const string KEY = "exampleCacheKey";
-
         [TestMethod]
         public void Empty_Wipe()
         {

@@ -3,16 +3,8 @@
 namespace MemoryCacheHelper.Tests
 {
     [TestClass]
-    public class HasKeyTests
+    public class HasKeyTests : BaseTests
     {
-        private const string KEY = "exampleCacheKey";
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            MemoryCache.Instance.Wipe();
-        }
-
         [TestMethod]
         public void Set_Null_Expect_HasKey_False()
         {

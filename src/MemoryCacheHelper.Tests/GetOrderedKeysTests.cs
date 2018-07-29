@@ -4,16 +4,8 @@ using System.Linq;
 namespace MemoryCacheHelper.Tests
 {
     [TestClass]
-    public class GetOrderedKeysTests
+    public class GetOrderedKeysTests : BaseTests
     {
-        private const string KEY = "exampleCacheKey";
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            MemoryCache.Instance.Wipe();
-        }
-
         [TestMethod]
         public void Set_Out_Of_Order_Then_GetOrderedKeys()
         {
