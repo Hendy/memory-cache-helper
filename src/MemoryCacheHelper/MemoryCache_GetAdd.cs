@@ -15,7 +15,40 @@ namespace MemoryCacheHelper
         /// <returns></returns>
         public T GetAdd<T>(string cacheKey, Func<T> expensiveFunc)
         {
-            throw new NotImplementedException();
-        }    
+            bool found;
+            T cachedObject = this.Get<T>(cacheKey, out found);
+
+            if (!found)
+            {
+                this._cacheKeysBeingHandled.TryAdd(cacheKey, new object()); // object used as a locker
+
+                lock (this._cacheKeysBeingHandled[cacheKey])
+                {
+                    // re-check to see if another thread beat us to setting this value
+                    cachedObject = this.Get<T>(cacheKey, out found);
+                    if (!found)
+                    {
+                        // TODO: this expensiveFunc() needs to be cancellable, and for this to then return whatever was put into cache by something else
+                        cachedObject = expensiveFunc();
+
+                        if (cachedObject == null)
+                        {
+                            // this doesn't go via this.Remove method, else it'd lock itself
+                            this._memoryCache.Remove(cacheKey);
+                        }
+                        else
+                        {
+                            this._memoryCache[cacheKey] = cachedObject;
+                        }
+                    }
+                }
+
+                object obj;
+                this._cacheKeysBeingHandled.TryRemove(cacheKey, out obj);
+            }
+
+            return cachedObject;
+
+        }
     }
 }
