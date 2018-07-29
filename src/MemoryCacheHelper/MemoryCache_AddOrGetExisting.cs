@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Caching;
 using System.Threading;
 
 namespace MemoryCacheHelper
@@ -13,8 +14,9 @@ namespace MemoryCacheHelper
         /// <typeparam name="T"></typeparam>
         /// <param name="cacheKey"></param>
         /// <param name="expensiveFunction"></param>
+        /// <param name="policy">optional CacheItemPolicy</param>
         /// <returns></returns>
-        public T AddOrGetExisting<T>(string cacheKey, Func<T> expensiveFunction)
+        public T AddOrGetExisting<T>(string cacheKey, Func<T> expensiveFunction, CacheItemPolicy policy = null)
         {
             bool found;
             T cachedObject = this.Get<T>(cacheKey, out found);
@@ -60,7 +62,14 @@ namespace MemoryCacheHelper
                                     else
                                     {
                                         // doesn't go via this.Set method, else it'd abort itself !
-                                        this._memoryCache[cacheKey] = cachedObject;
+                                        if (policy != null)
+                                        {
+                                            this._memoryCache.Set(cacheKey, cachedObject, policy);
+                                        }
+                                        else
+                                        {
+                                            this._memoryCache[cacheKey] = cachedObject;
+                                        }
                                     }
                                 }
                             }
