@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTests.cs" />
+    <Compile Include="GetAddTests.cs" />
     <Compile Include="GetOrderedKeysTests.cs" />
     <Compile Include="RemoveTests.cs" />
     <Compile Include="HasKeyTests.cs" />
