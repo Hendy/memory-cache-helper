@@ -55,7 +55,7 @@
     <Compile Include="HasKeyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="InstanceTests.cs" />
-    <Compile Include="GetSetTests.cs" />
+    <Compile Include="GetTests.cs" />
     <Compile Include="SetTests.cs" />
     <Compile Include="WipeTests.cs" />
   </ItemGroup>
