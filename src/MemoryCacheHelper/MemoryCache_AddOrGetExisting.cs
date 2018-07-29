@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MemoryCacheHelper.Interfaces;
+using System;
 using System.Runtime.Caching;
 using System.Threading;
 
@@ -58,17 +59,7 @@ namespace MemoryCacheHelper
                                     }
                                     else
                                     {
-                                        // TODO: adjust policy based on how long the valueFunction took to execute ?
-
-                                        // doesn't go via this.Set method, else it'd abort itself !
-                                        if (policy != null)
-                                        {
-                                            this._memoryCache.Set(key, value, policy);
-                                        }
-                                        else
-                                        {
-                                            this._memoryCache[key] = value;
-                                        }
+                                        ((ISetPolicy)this).Set(key, value, policy);
                                     }
                                 }
                             }

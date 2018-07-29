@@ -1,4 +1,5 @@
-﻿using System.Runtime.Caching;
+﻿using MemoryCacheHelper.Interfaces;
+using System.Runtime.Caching;
 
 namespace MemoryCacheHelper
 {
@@ -15,14 +16,7 @@ namespace MemoryCacheHelper
 
             if (value != null)
             {
-                if (policy != null)
-                {
-                    this._memoryCache.Set(key, value, policy);
-                }
-                else
-                {
-                    this._memoryCache[key] = value;
-                }
+                ((ISetPolicy)this).Set(key, value, policy);
 
                 // abort any expensive funcs attempting to set this key
                 if (this._cacheKeysBeingHandled.TryGetValue(key, out CacheKeyBeingHandled cacheKeyBeingHandled))

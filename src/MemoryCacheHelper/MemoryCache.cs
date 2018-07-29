@@ -1,10 +1,12 @@
-﻿using System.Collections.Concurrent;
+﻿using MemoryCacheHelper.Interfaces;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Caching;
 
 namespace MemoryCacheHelper
 {
-    public sealed partial class MemoryCache
+    public sealed partial class MemoryCache : ISetPolicy
     {
         /// <summary>
         /// Locker collection of all cache keys currently having their 'expensive functions' evaluated
@@ -24,6 +26,24 @@ namespace MemoryCacheHelper
         internal IEnumerable<string> GetOrderedKeys()
         {
             return this._memoryCache.Select(x => x.Key).OrderBy(x => x);
+        }
+
+        /// <summary>
+        /// The core method that sets values in the wrapped memory cache
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="policy"></param>
+        void ISetPolicy.Set(string key, object value, CacheItemPolicy policy)
+        {
+            if (policy != null)
+            {
+                this._memoryCache.Set(key, value, policy);
+            }
+            else
+            {
+                this._memoryCache[key] = value;
+            }
         }
     }
 }
