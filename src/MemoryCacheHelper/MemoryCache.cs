@@ -105,6 +105,7 @@ namespace MemoryCacheHelper
         /// <param name="expensiveFunc">function to execute if cache item not found</param>
         /// <param name="timeout">(optional) number of seconds before cache value should time out, default 0 = no timeout</param>
         /// <returns>an object from cache of type T, else the result of the expensiveFunc</returns>
+        [Obsolete("Use GetAdd<T>(string, Func<T>) instead")]
         public T GetSet<T>(string cacheKey, Func<T> expensiveFunc, int timeout = 0)
         {
             bool found;
@@ -134,11 +135,26 @@ namespace MemoryCacheHelper
         }
 
         /// <summary>
+        /// This method is to replace the GetSet method as the word Set implies that it's result should always be written to the cache,
+        /// however the GetSet locks incase another call hasn't yet finished, in which case it's result wouldn't be written to the cache, 
+        /// so it behaves more the Add word (as used on System.Runtime.Caching.MemoryCache)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="cacheKey"></param>
+        /// <param name="expensiveFunc"></param>
+        /// <returns></returns>
+        public T GetAdd<T>(string cacheKey, Func<T> expensiveFunc)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Populate the cache key with the supplied object - supplying null will remove cache item
         /// </summary>
         /// <param name="cacheKey">key for the cache item to set</param>
         /// <param name="objectToCache">object to put into the cache item, null will remove cache item</param>
         /// <param name="timeout">(optional) number of seconds before cache value should time out, default 0 = no timeout</param>
+        [Obsolete("Use Set(string, object) instead")]
         public void Set(string cacheKey, object objectToCache, int timeout = 0)
         {
             if (objectToCache != null)
@@ -164,12 +180,33 @@ namespace MemoryCacheHelper
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cacheKey"></param>
+        /// <param name="objectToCache"></param>
+        public void Set(string cacheKey, object objectToCache)
+        {
+            if (objectToCache == null)
+            {
+                this.Remove(cacheKey);
+            }
+            else
+            {
+                // TODO: pause any expensive function on this key
+                this._memoryCache[cacheKey] = objectToCache;
+                // TODO: cancel any expensive function on this key (it'll return the new value set here)
+            }
+        }
+
+        /// <summary>
         /// Remove an item from cache
         /// </summary>
         /// <param name="cacheKey">the key to the item to remove</param>
         public void Remove(string cacheKey)
         {
+            // TODO: pause any expensive function on this key
             this._memoryCache.Remove(cacheKey);
+            // TODO: cancel any expensive function on this key (it'll return the new value set here)
         }
 
         /// <summary>
@@ -182,7 +219,7 @@ namespace MemoryCacheHelper
             {
                 if (lambda(key))
                 {
-                    this._memoryCache.Remove(key);
+                    this.Remove(key);
                 }
             }
         }
@@ -194,7 +231,7 @@ namespace MemoryCacheHelper
         {
             foreach (var key in this._memoryCache.Select(x => x.Key))
             {
-                this._memoryCache.Remove(key);
+                this.Remove(key);
             }
         }
 
