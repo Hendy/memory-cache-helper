@@ -1,4 +1,5 @@
 ﻿using MemoryCacheHelper.Interfaces;
+using MemoryCacheHelper.Models;
 using System;
 using System.Runtime.Caching;
 using System.Threading;

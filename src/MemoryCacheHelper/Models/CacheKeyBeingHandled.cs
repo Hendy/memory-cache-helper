@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace MemoryCacheHelper
+namespace MemoryCacheHelper.Models
 {
     /// <summary>
     /// Respresents the setting state of a single cache item

@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CacheKeyBeingHandled.cs" />
+    <Compile Include="Models\CacheKeyBeingHandled.cs" />
     <Compile Include="Interfaces\ISetDirect.cs" />
     <Compile Include="MemoryCache.cs" />
     <Compile Include="MemoryCache_AddOrGetExisting.cs" />

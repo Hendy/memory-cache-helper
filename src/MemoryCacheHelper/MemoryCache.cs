@@ -1,4 +1,5 @@
 ﻿using MemoryCacheHelper.Interfaces;
+using MemoryCacheHelper.Models;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;

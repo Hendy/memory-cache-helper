@@ -1,4 +1,5 @@
 ﻿using MemoryCacheHelper.Interfaces;
+using MemoryCacheHelper.Models;
 using System.Runtime.Caching;
 
 namespace MemoryCacheHelper

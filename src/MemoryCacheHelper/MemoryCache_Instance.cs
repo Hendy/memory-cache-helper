@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MemoryCacheHelper.Models;
+using System;
 using System.Collections.Concurrent;
 
 namespace MemoryCacheHelper
