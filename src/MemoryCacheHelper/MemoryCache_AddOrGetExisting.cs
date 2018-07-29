@@ -59,7 +59,7 @@ namespace MemoryCacheHelper
                                     }
                                     else
                                     {
-                                        ((ISetPolicy)this).Set(key, value, policy);
+                                        ((ISetDirect)this).Set(key, value, policy);
                                     }
                                 }
                             }

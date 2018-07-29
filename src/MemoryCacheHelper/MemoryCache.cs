@@ -6,7 +6,7 @@ using System.Runtime.Caching;
 
 namespace MemoryCacheHelper
 {
-    public sealed partial class MemoryCache : ISetPolicy
+    public sealed partial class MemoryCache : ISetDirect
     {
         /// <summary>
         /// Locker collection of all cache keys currently having their 'expensive functions' evaluated
@@ -29,12 +29,12 @@ namespace MemoryCacheHelper
         }
 
         /// <summary>
-        /// The core method that sets values in the wrapped memory cache
+        /// The core method that directly sets a value in the wrapped memory cache
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <param name="policy"></param>
-        void ISetPolicy.Set(string key, object value, CacheItemPolicy policy)
+        void ISetDirect.Set(string key, object value, CacheItemPolicy policy)
         {
             if (policy != null)
             {

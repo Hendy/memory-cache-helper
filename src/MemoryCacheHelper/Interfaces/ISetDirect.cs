@@ -5,7 +5,7 @@ namespace MemoryCacheHelper.Interfaces
     /// <summary>
     /// interface used so caller can target a specific Set method (which would normally conflict with an existing override)
     /// </summary>
-    internal interface ISetPolicy
+    internal interface ISetDirect
     {
         /// <summary>
         /// This set method updates the wrapped memory cache directly

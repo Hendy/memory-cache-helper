@@ -16,7 +16,7 @@ namespace MemoryCacheHelper
 
             if (value != null)
             {
-                ((ISetPolicy)this).Set(key, value, policy);
+                ((ISetDirect)this).Set(key, value, policy);
 
                 // abort any expensive funcs attempting to set this key
                 if (this._cacheKeysBeingHandled.TryGetValue(key, out CacheKeyBeingHandled cacheKeyBeingHandled))
