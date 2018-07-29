@@ -7,16 +7,8 @@ namespace MemoryCacheHelper.Tests
     /// Testing the singleton
     /// </summary>
     [TestClass]
-    public class InstanceTests
+    public class InstanceTests : BaseTests
     {
-        private const string KEY = "exampleCacheKey";
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            MemoryCache.Instance.Wipe();
-        }
-
         [TestMethod]
         public void Ensure_Same_Instance_Between_Threads()
         {
