@@ -7,7 +7,7 @@ using System.Runtime.Caching;
 
 namespace MemoryCacheHelper
 {
-    public sealed partial class MemoryCache : ISetDirect
+    public sealed partial class MemoryCache : IMemoryCacheDirect
     {
         /// <summary>
         /// Locker collection of all cache keys currently having their 'expensive functions' evaluated
@@ -35,7 +35,7 @@ namespace MemoryCacheHelper
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <param name="policy"></param>
-        void ISetDirect.Set(string key, object value, CacheItemPolicy policy)
+        void IMemoryCacheDirect.Set(string key, object value, CacheItemPolicy policy)
         {
             if (policy != null)
             {
@@ -45,6 +45,15 @@ namespace MemoryCacheHelper
             {
                 this._memoryCache[key] = value;
             }
+        }
+
+        /// <summary>
+        /// The core method that direcly removes an item from the wrapped memory cache
+        /// </summary>
+        /// <param name="key"></param>
+        void IMemoryCacheDirect.Remove(string key)
+        {
+            this._memoryCache.Remove(key);
         }
     }
 }

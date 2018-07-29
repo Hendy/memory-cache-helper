@@ -55,12 +55,11 @@ namespace MemoryCacheHelper
                                 {
                                     if (value == null)
                                     {
-                                        // doesn't go via this.Remove method, else it'd abort itself !
-                                        this._memoryCache.Remove(key);
+                                        ((IMemoryCacheDirect)this).Remove(key);
                                     }
                                     else
                                     {
-                                        ((ISetDirect)this).Set(key, value, policy);
+                                        ((IMemoryCacheDirect)this).Set(key, value, policy);
                                     }
                                 }
                             }

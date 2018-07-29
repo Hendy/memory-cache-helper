@@ -1,4 +1,5 @@
-﻿using MemoryCacheHelper.Models;
+﻿using MemoryCacheHelper.Interfaces;
+using MemoryCacheHelper.Models;
 using System;
 using System.Linq;
 
@@ -12,7 +13,7 @@ namespace MemoryCacheHelper
         /// <param name="key">the key to the item to remove</param>
         public void Remove(string key)
         {
-            this._memoryCache.Remove(key);
+            ((IMemoryCacheDirect)this).Remove(key);
 
             if (this._cacheKeysBeingHandled.TryGetValue(key, out CacheKeyBeingHandled cacheKeyBeingHandled))
             {
