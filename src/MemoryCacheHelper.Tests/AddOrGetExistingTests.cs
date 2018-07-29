@@ -9,7 +9,7 @@ namespace MemoryCacheHelper.Tests
     public class AddOrGetExistingTests : BaseTests
     {
         [TestMethod]
-        public void GetAdd_String()
+        public void AddOrGetExisting_String()
         {
             var input = "hello world";
 
@@ -24,18 +24,24 @@ namespace MemoryCacheHelper.Tests
         [TestMethod]
         public void Ensure_First_Function_Wins()
         {
+            var output = false;
+            var started = false;
+
             Task.Run(() => {
-                MemoryCache.Instance.AddOrGetExisting(KEY, () => {
-                    Thread.Sleep(1000);
+                output = MemoryCache.Instance.AddOrGetExisting(KEY, () => {
+                    started = true;
+                    Thread.Sleep(250);
                     return true;
                 });
             });
 
-            Thread.Sleep(500); // give the task enough time to make it's lock
+            while (!started) { };
+            //Thread.Sleep(50); // give the task enough time to make it's lock
 
             MemoryCache.Instance.AddOrGetExisting(KEY, () => false); // this should be blocked, so it's value not set
 
-            Assert.IsTrue(MemoryCache.Instance.Get<bool>(KEY));
+            Assert.IsTrue(MemoryCache.Instance.Get<bool>(KEY));  // expect the result from the task
+            Assert.IsTrue(output);
         }
     }
 }
