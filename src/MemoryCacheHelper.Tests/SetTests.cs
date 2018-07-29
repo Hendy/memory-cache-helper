@@ -14,38 +14,34 @@ namespace MemoryCacheHelper.Tests
         [TestMethod]
         public void Cancel_Long_Running_Function()
         {
-            Thread innerThread = null;
+            var output = false;
+            var started = false;
 
             Task.Run(() =>
             {
-                MemoryCache.Instance.AddOrGetExisting(KEY, () =>
+                output = MemoryCache.Instance.AddOrGetExisting(KEY, () =>
                 {
-                    innerThread = new Thread(() =>
-                    {
-                        while (true) { };
-                    });
+                    started = true;
 
-                    innerThread.Start();
-                    innerThread.Join();
+                    while (true) { };
 
                     return true;
                 });
 
             });
 
-            Thread.Sleep(1000);
+            Thread.Sleep(500); // allow the expensive func to start
 
-            //Assert.IsTrue(innerThread != null && innerThread.IsAlive);
+            Assert.IsTrue(started);
 
-            Assert.IsNull(MemoryCache.Instance.Get<bool?>(KEY));
+            Assert.IsFalse(MemoryCache.Instance.HasKey(KEY));
 
-            MemoryCache.Instance.Set(KEY, false); // this should cancel the method waiting above
+            MemoryCache.Instance.Set(KEY, false); // this should cancel the infinite loop method, triggering it's output to be set from this
 
-            Assert.IsFalse(MemoryCache.Instance.Get<bool?>(KEY).Value);
+            Assert.IsTrue(MemoryCache.Instance.HasKey(KEY));
+            Assert.IsFalse(MemoryCache.Instance.Get<bool>(KEY));
 
-            Thread.Sleep(1000);
-            //Assert.IsFalse(innerThread != null || innerThread.IsAlive);
-            //Assert.IsFalse(innerThread.IsAlive);
+            Assert.IsFalse(output);
         }
     }
 }
