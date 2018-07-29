@@ -11,7 +11,7 @@
 	// Ensure result of a function is in cache and return it
 	// This handles thread blocking (on a per key basis) such that only the first function is executed
 	// If another thread directly sets this key, then this function is cancelled and the result returned from cache
-	var myObject = MemoryCache.Instance.GetAdd<MyObject>("myKey", () => {
+	var myObject = MemoryCache.Instance.AddOrGetExisting<MyObject>("myKey", () => {
 		// some (potentially) long running function
 		return new MyObject();
 	});

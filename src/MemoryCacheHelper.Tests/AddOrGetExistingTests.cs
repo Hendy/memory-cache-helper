@@ -4,14 +4,14 @@ using System.Threading;
 namespace MemoryCacheHelper.Tests
 {
     [TestClass]
-    public class GetAddTests : BaseTests
+    public class AddOrGetExistingTests : BaseTests
     {
         [TestMethod]
         public void GetAdd_String()
         {
             var input = "hello world";
 
-            var output = MemoryCache.Instance.GetAdd<string>(KEY, () => input);
+            var output = MemoryCache.Instance.AddOrGetExisting<string>(KEY, () => input);
 
             Assert.AreEqual(input, output);
         }
@@ -22,12 +22,12 @@ namespace MemoryCacheHelper.Tests
         [TestMethod]
         public void Ensure_First_Function_Wins()
         {
-            MemoryCache.Instance.GetAdd(KEY, () => {
+            MemoryCache.Instance.AddOrGetExisting(KEY, () => {
                 Thread.Sleep(System.TimeSpan.FromSeconds(5).Milliseconds);
                 return true;
             });
 
-            MemoryCache.Instance.GetAdd(KEY, () => false);
+            MemoryCache.Instance.AddOrGetExisting(KEY, () => false);
 
             Assert.IsTrue(MemoryCache.Instance.Get<bool>(KEY));
         }

@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MemoryCache.cs" />
-    <Compile Include="MemoryCache_GetAdd.cs" />
+    <Compile Include="MemoryCache_AddOrGetExisting.cs" />
     <Compile Include="MemoryCache_Get.cs" />
     <Compile Include="MemoryCache_HasKey.cs" />
     <Compile Include="MemoryCache_Instance.cs" />

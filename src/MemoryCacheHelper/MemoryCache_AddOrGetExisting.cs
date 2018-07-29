@@ -13,7 +13,7 @@ namespace MemoryCacheHelper
         /// <param name="cacheKey"></param>
         /// <param name="expensiveFunc"></param>
         /// <returns></returns>
-        public T GetAdd<T>(string cacheKey, Func<T> expensiveFunc)
+        public T AddOrGetExisting<T>(string cacheKey, Func<T> expensiveFunc)
         {
             bool found;
             T cachedObject = this.Get<T>(cacheKey, out found);
