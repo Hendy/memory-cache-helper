@@ -35,8 +35,9 @@ namespace MemoryCacheHelper.Tests
                 });
             });
 
-            while (!started) { };
-            //Thread.Sleep(50); // give the task enough time to make it's lock
+            //while (!started) { };
+            Thread.Sleep(50); // give the task enough time to make it's lock
+            Assert.IsTrue(started);
 
             MemoryCache.Instance.AddOrGetExisting(KEY, () => false); // this should be blocked, so it's value not set
 
