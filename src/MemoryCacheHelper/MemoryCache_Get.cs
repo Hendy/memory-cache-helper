@@ -6,25 +6,25 @@
         /// Queries key in cache for object of type T
         /// </summary>
         /// <typeparam name="T">type of object expected</typeparam>
-        /// <param name="cacheKey">key to the cache item to get</param>
+        /// <param name="key">key to the cache item to get</param>
         /// <returns>an object from cache of type T, else default(T)</returns>
-        public T Get<T>(string cacheKey)
+        public T Get<T>(string key)
         {
             bool found;
 
-            return this.Get<T>(cacheKey, out found);
+            return this.Get<T>(key, out found);
         }
 
         /// <summary>
         /// Queries key in cache for object of type T
         /// </summary>
         /// <typeparam name="T">type of object expected</typeparam>
-        /// <param name="cacheKey">key to the cache item to get</param>
+        /// <param name="key">key to the cache item to get</param>
         /// <param name="found">output parameter, indicates whether the return value was found in the cache</param>
         /// <returns>an object from cache of type T, else default(T)</returns>
-        public T Get<T>(string cacheKey, out bool found)
+        public T Get<T>(string key, out bool found)
         {
-            object obj = this._memoryCache[cacheKey];
+            object obj = this._memoryCache[key];
 
             if (obj is T)
             {

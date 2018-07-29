@@ -7,32 +7,32 @@ namespace MemoryCacheHelper
         /// <summary>
         /// Immediately sets a cache key, aborting any long running funcation on it
         /// </summary>
-        /// <param name="cacheKey">key to cahe item to set</param>
-        /// <param name="objectToCache">the object to cache</param>
-        public void Set(string cacheKey, object objectToCache, CacheItemPolicy policy = null)
+        /// <param name="key">key to cahe item to set</param>
+        /// <param name="value">the object to cache</param>
+        public void Set(string key, object value, CacheItemPolicy policy = null)
         {
             // TODO: prevent a write if a wipe is currently taking place
 
-            if (objectToCache != null)
+            if (value != null)
             {
                 if (policy != null)
                 {
-                    this._memoryCache.Set(cacheKey, objectToCache, policy);
+                    this._memoryCache.Set(key, value, policy);
                 }
                 else
                 {
-                    this._memoryCache[cacheKey] = objectToCache;
+                    this._memoryCache[key] = value;
                 }
 
                 // abort any expensive funcs attempting to set this key
-                if (this._cacheKeysBeingHandled.TryGetValue(cacheKey, out CacheKeyBeingHandled cacheKeyBeingHandled))
+                if (this._cacheKeysBeingHandled.TryGetValue(key, out CacheKeyBeingHandled cacheKeyBeingHandled))
                 {
                     cacheKeyBeingHandled.ExpensiveFunctionThread.Abort();
                 }
             }
             else
             {
-                this.Remove(cacheKey);
+                this.Remove(key);
             }
         }
     }

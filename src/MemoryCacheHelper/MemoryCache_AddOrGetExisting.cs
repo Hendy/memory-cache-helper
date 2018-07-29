@@ -12,35 +12,35 @@ namespace MemoryCacheHelper
         /// so it behaves more the Add word (as used on System.Runtime.Caching.MemoryCache)
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="cacheKey"></param>
-        /// <param name="expensiveFunction"></param>
+        /// <param name="key"></param>
+        /// <param name="valueFunction"></param>
         /// <param name="policy">optional CacheItemPolicy</param>
         /// <returns></returns>
-        public T AddOrGetExisting<T>(string cacheKey, Func<T> expensiveFunction, CacheItemPolicy policy = null)
+        public T AddOrGetExisting<T>(string key, Func<T> valueFunction, CacheItemPolicy policy = null)
         {
             bool found;
-            T cachedObject = this.Get<T>(cacheKey, out found);
+            T cachedObject = this.Get<T>(key, out found);
 
             if (!found)
             {
                 //TODO: prevent a write if currenlty being wiped
 
-                this._cacheKeysBeingHandled.TryAdd(cacheKey, new CacheKeyBeingHandled()); // TODO: handle unexpected fails to add
+                this._cacheKeysBeingHandled.TryAdd(key, new CacheKeyBeingHandled()); // TODO: handle unexpected fails to add
 
-                lock (this._cacheKeysBeingHandled[cacheKey].Lock)
+                lock (this._cacheKeysBeingHandled[key].Lock)
                 {
                     // re-check to see if another thread beat us to setting this value
-                    cachedObject = this.Get<T>(cacheKey, out found);
+                    cachedObject = this.Get<T>(key, out found);
                     if (!found)
                     {
                         // put the expensive function into it's own thread (so it can be cancelled)
-                        this._cacheKeysBeingHandled[cacheKey].ExpensiveFunctionThread = new Thread(() => {
+                        this._cacheKeysBeingHandled[key].ExpensiveFunctionThread = new Thread(() => {
 
                             var aborted = false;
 
                             try
                             {
-                                cachedObject = expensiveFunction();
+                                cachedObject = valueFunction();
                             }
                             catch (ThreadAbortException)
                             {
@@ -50,37 +50,37 @@ namespace MemoryCacheHelper
                             {
                                 if (aborted)
                                 {                                    
-                                    cachedObject = this.Get<T>(cacheKey);
+                                    cachedObject = this.Get<T>(key);
                                 }
                                 else
                                 {
                                     if (cachedObject == null)
                                     {
                                         // doesn't go via this.Remove method, else it'd abort itself !
-                                        this._memoryCache.Remove(cacheKey);
+                                        this._memoryCache.Remove(key);
                                     }
                                     else
                                     {
                                         // doesn't go via this.Set method, else it'd abort itself !
                                         if (policy != null)
                                         {
-                                            this._memoryCache.Set(cacheKey, cachedObject, policy);
+                                            this._memoryCache.Set(key, cachedObject, policy);
                                         }
                                         else
                                         {
-                                            this._memoryCache[cacheKey] = cachedObject;
+                                            this._memoryCache[key] = cachedObject;
                                         }
                                     }
                                 }
                             }
                         });
 
-                        this._cacheKeysBeingHandled[cacheKey].ExpensiveFunctionThread.Start();
-                        this._cacheKeysBeingHandled[cacheKey].ExpensiveFunctionThread.Join();
+                        this._cacheKeysBeingHandled[key].ExpensiveFunctionThread.Start();
+                        this._cacheKeysBeingHandled[key].ExpensiveFunctionThread.Join();
                     }
                 }
 
-                this._cacheKeysBeingHandled.TryRemove(cacheKey, out CacheKeyBeingHandled cacheKeyBeingHandled); // TODO: handle unepxected fails to remove
+                this._cacheKeysBeingHandled.TryRemove(key, out CacheKeyBeingHandled cacheKeyBeingHandled); // TODO: handle unepxected fails to remove
             }
 
             return cachedObject;
