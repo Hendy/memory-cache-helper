@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,7 +13,7 @@ namespace MemoryCacheHelper.Tests
         [TestMethod]
         public void Cancel_Long_Running_Function()
         {
-            var output = false;
+            bool? output = null;
             var started = false;
 
             Task.Run(() =>
@@ -23,25 +22,25 @@ namespace MemoryCacheHelper.Tests
                 {
                     started = true;
 
-                    while (true) { };
+                    while (true) { }; // infinite loop
 
-                    return true;
+                    return false;
                 });
 
             });
 
-            Thread.Sleep(500); // allow the expensive func to start
+            Thread.Sleep(100); // allow time for the expensive func to start
 
             Assert.IsTrue(started);
-
+            Assert.IsFalse(output.HasValue);
             Assert.IsFalse(MemoryCache.Instance.HasKey(KEY));
 
-            MemoryCache.Instance.Set(KEY, false); // this should cancel the infinite loop method, triggering it's output to be set from this
+            MemoryCache.Instance.Set(KEY, true); // this should cancel the infinite loop method, triggering it's output to be set from this
 
             Assert.IsTrue(MemoryCache.Instance.HasKey(KEY));
-            Assert.IsFalse(MemoryCache.Instance.Get<bool>(KEY));
-
-            Assert.IsFalse(output);
+            Assert.IsTrue(MemoryCache.Instance.Get<bool>(KEY));
+            Assert.IsTrue(output.HasValue);
+            Assert.IsTrue(output.Value);
         }
     }
 }

@@ -12,10 +12,8 @@
         {
             if (objectToCache != null)
             {
-                if (this._cacheKeysBeingHandled.TryGetValue(cacheKey, out object value))
+                if (this._cacheKeysBeingHandled.TryGetValue(cacheKey, out CacheKeyBeingHandled cacheKeyBeingHandled))
                 {
-                    var cacheKeyBeingHandled = (CacheKeyBeingHandled)value;
-
                     cacheKeyBeingHandled.ExpensiveFunctionThread.Suspend();
 
                     this._memoryCache[cacheKey] = objectToCache;

@@ -12,7 +12,7 @@ namespace MemoryCacheHelper
         /// Locker collection of all cache keys currently having their 'expensive functions' evaluated
         /// string = cacheKey, object = used as a locking object
         /// </summary>
-        private ConcurrentDictionary<string, object> _cacheKeysBeingHandled;
+        private ConcurrentDictionary<string, CacheKeyBeingHandled> _cacheKeysBeingHandled;
 
         /// <summary>
         /// Internal instance of the <see cref="System.Runtime.Caching.MemoryCache"/> class
@@ -37,7 +37,7 @@ namespace MemoryCacheHelper
         /// <param name="expensiveFunc">function to execute if cache item not found</param>
         /// <param name="timeout">(optional) number of seconds before cache value should time out, default 0 = no timeout</param>
         /// <returns>an object from cache of type T, else the result of the expensiveFunc</returns>
-        [Obsolete("Use GetAdd<T>(string, Func<T>) instead")]
+        [Obsolete("Use AddOrGetExisting<T>(string, Func<T>) instead")]
         public T GetSet<T>(string cacheKey, Func<T> expensiveFunc, int timeout = 0)
         {
             bool found;
@@ -45,9 +45,9 @@ namespace MemoryCacheHelper
 
             if (!found)
             {
-                this._cacheKeysBeingHandled.TryAdd(cacheKey, new object()); // object used as a locker
+                this._cacheKeysBeingHandled.TryAdd(cacheKey, new CacheKeyBeingHandled());
 
-                lock (this._cacheKeysBeingHandled[cacheKey])
+                lock (this._cacheKeysBeingHandled[cacheKey].Lock)
                 {
                     // re-check to see if another thread beat us to setting this value
                     cachedObject = this.Get<T>(cacheKey, out found);
@@ -59,8 +59,8 @@ namespace MemoryCacheHelper
                     }
                 }
 
-                object obj;
-                this._cacheKeysBeingHandled.TryRemove(cacheKey, out obj);
+                CacheKeyBeingHandled cacheKeyBeingHandled;
+                this._cacheKeysBeingHandled.TryRemove(cacheKey, out cacheKeyBeingHandled);
             }
 
             return cachedObject;

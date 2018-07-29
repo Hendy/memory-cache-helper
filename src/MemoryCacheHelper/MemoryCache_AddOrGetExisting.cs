@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace MemoryCacheHelper
 {
@@ -24,13 +23,13 @@ namespace MemoryCacheHelper
             {
                 this._cacheKeysBeingHandled.TryAdd(cacheKey, new CacheKeyBeingHandled()); // TODO: handle unexpected fails to add
 
-                lock (((CacheKeyBeingHandled)this._cacheKeysBeingHandled[cacheKey]).Lock)
+                lock (this._cacheKeysBeingHandled[cacheKey].Lock)
                 {
                     // re-check to see if another thread beat us to setting this value
                     cachedObject = this.Get<T>(cacheKey, out found);
                     if (!found)
                     {
-                        ((CacheKeyBeingHandled)this._cacheKeysBeingHandled[cacheKey]).ExpensiveFunctionThread = new Thread(() => {
+                        this._cacheKeysBeingHandled[cacheKey].ExpensiveFunctionThread = new Thread(() => {
                             try
                             {
                                 cachedObject = expensiveFunction();
@@ -44,27 +43,26 @@ namespace MemoryCacheHelper
                             {
                                 if (cachedObject == null)
                                 {
-                                    // this doesn't go via this.Remove method, else it'd lock itself
+                                    // doesn't go via this.Remove method, else it'd suspend itself
                                     this._memoryCache.Remove(cacheKey);
                                 }
                                 else
                                 {
+                                    // doesn't go via this.Set method, else it'd suspend itself
                                     this._memoryCache[cacheKey] = cachedObject;
                                 }
                             }
                         });
 
-                        ((CacheKeyBeingHandled)this._cacheKeysBeingHandled[cacheKey]).ExpensiveFunctionThread.Start();
-                        ((CacheKeyBeingHandled)this._cacheKeysBeingHandled[cacheKey]).ExpensiveFunctionThread.Join();
+                        this._cacheKeysBeingHandled[cacheKey].ExpensiveFunctionThread.Start();
+                        this._cacheKeysBeingHandled[cacheKey].ExpensiveFunctionThread.Join();
                     }
                 }
 
-                object obj;
-                this._cacheKeysBeingHandled.TryRemove(cacheKey, out obj);
+                this._cacheKeysBeingHandled.TryRemove(cacheKey, out CacheKeyBeingHandled cacheKeyBeingHandled); // TODO: handle unepxected fails to remove
             }
 
             return cachedObject;
-
         }
     }
 }

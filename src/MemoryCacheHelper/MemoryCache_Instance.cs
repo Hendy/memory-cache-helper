@@ -21,7 +21,7 @@ namespace MemoryCacheHelper
         {
             this._memoryCache = new System.Runtime.Caching.MemoryCache(Guid.NewGuid().ToString());
 
-            this._cacheKeysBeingHandled = new ConcurrentDictionary<string, object>();
+            this._cacheKeysBeingHandled = new ConcurrentDictionary<string, CacheKeyBeingHandled>();
         }
 
         /// <summary>
