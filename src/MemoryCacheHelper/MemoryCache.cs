@@ -71,9 +71,9 @@ namespace MemoryCacheHelper
         /// </summary>
         /// <param name="cacheKey">key for the cache item to set</param>
         /// <param name="objectToCache">object to put into the cache item, null will remove cache item</param>
-        /// <param name="timeout">(optional) number of seconds before cache value should time out, default 0 = no timeout</param>
+        /// <param name="timeout">number of seconds before cache value should time out, default 0 = no timeout</param>
         [Obsolete("Use Set(string, object) instead")]
-        public void Set(string cacheKey, object objectToCache, int timeout = 0)
+        public void Set(string cacheKey, object objectToCache, int timeout)
         {
             if (objectToCache != null)
             {
