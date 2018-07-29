@@ -12,9 +12,21 @@
         {
             if (objectToCache != null)
             {
-                // TODO: pause any expensive function on this key
-                this._memoryCache[cacheKey] = objectToCache;
-                // TODO: cancel any expensive function on this key (it'll return the new value set here)
+                if (this._cacheKeysBeingHandled.TryGetValue(cacheKey, out object value))
+                {
+                    var cacheKeyBeingHandled = (CacheKeyBeingHandled)value;
+
+                    cacheKeyBeingHandled.ExpensiveFunctionThread.Suspend();
+
+                    this._memoryCache[cacheKey] = objectToCache;
+
+                    cacheKeyBeingHandled.ExpensiveFunctionThread.Resume();
+                    cacheKeyBeingHandled.ExpensiveFunctionThread.Abort();
+                }
+                else
+                {
+                    this._memoryCache[cacheKey] = objectToCache;
+                }
             }
             else
             {

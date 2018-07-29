@@ -1,5 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace MemoryCacheHelper.Tests
 {
@@ -22,12 +24,16 @@ namespace MemoryCacheHelper.Tests
         [TestMethod]
         public void Ensure_First_Function_Wins()
         {
-            MemoryCache.Instance.AddOrGetExisting(KEY, () => {
-                Thread.Sleep(System.TimeSpan.FromSeconds(5).Milliseconds);
-                return true;
+            Task.Run(() => {
+                MemoryCache.Instance.AddOrGetExisting(KEY, () => {
+                    Thread.Sleep(1000);
+                    return true;
+                });
             });
 
-            MemoryCache.Instance.AddOrGetExisting(KEY, () => false);
+            Thread.Sleep(500); // give the task enough time to make it's lock
+
+            MemoryCache.Instance.AddOrGetExisting(KEY, () => false); // this should be blocked, so it's value not set
 
             Assert.IsTrue(MemoryCache.Instance.Get<bool>(KEY));
         }

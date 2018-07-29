@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MemoryCacheHelper
 {
@@ -11,35 +13,49 @@ namespace MemoryCacheHelper
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="cacheKey"></param>
-        /// <param name="expensiveFunc"></param>
+        /// <param name="expensiveFunction"></param>
         /// <returns></returns>
-        public T AddOrGetExisting<T>(string cacheKey, Func<T> expensiveFunc)
+        public T AddOrGetExisting<T>(string cacheKey, Func<T> expensiveFunction)
         {
             bool found;
             T cachedObject = this.Get<T>(cacheKey, out found);
 
             if (!found)
             {
-                this._cacheKeysBeingHandled.TryAdd(cacheKey, new object()); // object used as a locker
+                this._cacheKeysBeingHandled.TryAdd(cacheKey, new CacheKeyBeingHandled()); // TODO: handle unexpected fails to add
 
-                lock (this._cacheKeysBeingHandled[cacheKey])
+                lock (((CacheKeyBeingHandled)this._cacheKeysBeingHandled[cacheKey]).Lock)
                 {
                     // re-check to see if another thread beat us to setting this value
                     cachedObject = this.Get<T>(cacheKey, out found);
                     if (!found)
                     {
-                        // TODO: this expensiveFunc() needs to be cancellable, and for this to then return whatever was put into cache by something else
-                        cachedObject = expensiveFunc();
+                        ((CacheKeyBeingHandled)this._cacheKeysBeingHandled[cacheKey]).ExpensiveFunctionThread = new Thread(() => {
+                            try
+                            {
+                                cachedObject = expensiveFunction();
+                            }
+                            catch (ThreadAbortException)
+                            {
+                                // the thread was aborted becuase something else changed the cache key this long running function was trying to set
+                                cachedObject = this.Get<T>(cacheKey);
+                            }
+                            finally
+                            {
+                                if (cachedObject == null)
+                                {
+                                    // this doesn't go via this.Remove method, else it'd lock itself
+                                    this._memoryCache.Remove(cacheKey);
+                                }
+                                else
+                                {
+                                    this._memoryCache[cacheKey] = cachedObject;
+                                }
+                            }
+                        });
 
-                        if (cachedObject == null)
-                        {
-                            // this doesn't go via this.Remove method, else it'd lock itself
-                            this._memoryCache.Remove(cacheKey);
-                        }
-                        else
-                        {
-                            this._memoryCache[cacheKey] = cachedObject;
-                        }
+                        ((CacheKeyBeingHandled)this._cacheKeysBeingHandled[cacheKey]).ExpensiveFunctionThread.Start();
+                        ((CacheKeyBeingHandled)this._cacheKeysBeingHandled[cacheKey]).ExpensiveFunctionThread.Join();
                     }
                 }
 

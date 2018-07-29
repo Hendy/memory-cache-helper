@@ -11,9 +11,21 @@ namespace MemoryCacheHelper
         /// <param name="cacheKey">the key to the item to remove</param>
         public void Remove(string cacheKey)
         {
-            // TODO: pause any expensive function on this key
-            this._memoryCache.Remove(cacheKey);
-            // TODO: cancel any expensive function on this key (it'll return the new value set here)
+            if (this._cacheKeysBeingHandled.TryGetValue(cacheKey, out object value))
+            {
+                var cacheKeyBeingHandled = (CacheKeyBeingHandled)value;
+
+                cacheKeyBeingHandled.ExpensiveFunctionThread.Suspend();
+
+                this._memoryCache.Remove(cacheKey);
+
+                cacheKeyBeingHandled.ExpensiveFunctionThread.Resume();
+                cacheKeyBeingHandled.ExpensiveFunctionThread.Abort();
+            }
+            else
+            {
+                this._memoryCache.Remove(cacheKey);
+            }         
         }
 
         /// <summary>
