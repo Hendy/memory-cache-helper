@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MemoryCacheHelper.Tests
@@ -52,12 +51,11 @@ namespace MemoryCacheHelper.Tests
             while (!started) { }
 
             Assert.IsTrue(started);
+            Assert.IsNull(output);
 
             MemoryCache.Instance.Wipe();
 
-            // how do we see if the concurrent dictionary is empty too ?
-            //Assert.
-
+            Assert.IsNull(output);
         }
     }
 }

@@ -17,6 +17,8 @@ namespace MemoryCacheHelper
         /// <returns></returns>
         public T AddOrGetExisting<T>(string key, Func<T> valueFunction, CacheItemPolicy policy = null)
         {
+            //if (this._isWiping) { return default(T); }
+
             bool found;
             T value = this.Get<T>(key, out found);
 

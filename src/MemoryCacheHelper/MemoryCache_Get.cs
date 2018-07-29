@@ -24,6 +24,8 @@
         /// <returns>an object from cache of type T, else default(T)</returns>
         public T Get<T>(string key, out bool found)
         {
+            //if (this._isWiping) { return default(T); }
+
             object value = this._memoryCache[key];
 
             if (value is T)

@@ -20,6 +20,11 @@ namespace MemoryCacheHelper
         private System.Runtime.Caching.MemoryCache _memoryCache;
 
         /// <summary>
+        /// flag indicating whether the wipe method is currenly being executed
+        /// </summary>
+        private bool _isWiping = false;
+
+        /// <summary>
         /// Enumerates sorting the collection of cache keys
         /// (not in it's own partial yet, as not public)
         /// </summary>
