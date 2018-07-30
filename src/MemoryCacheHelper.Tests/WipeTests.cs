@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MemoryCacheHelper.Tests
@@ -48,7 +49,9 @@ namespace MemoryCacheHelper.Tests
 
             });
 
-            while (!started) { }
+            //while (!started) { }
+
+            Thread.Sleep(100); // allow time for the expensive func to start
 
             Assert.IsTrue(started);
             Assert.IsNull(output);
