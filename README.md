@@ -12,14 +12,14 @@ A singleton wrapper around an System.Runtime.Caching.MemoryCache instance, provi
 
 	// Get or set if empty, a typed value by function
 	var myObject = MemoryCache.Instance.AddOrGetExisting<MyObject>("myKey", () => {		
-		// can be a long running function here - will be terminated if a direct Set occurs on this key from elsewhere
+		// can be a long running function here
 		return new MyObject();
 	});
 
 	// Does cache item exist
 	bool hasKey = MemoryCache.HasKey("myKey");
 
-	// Remove a cache item
+	// Remove cache item
 	MemoryCache.Instance.Remove("myKey");
 		
 	// Remove cache items by function
