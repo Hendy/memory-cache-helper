@@ -17,31 +17,29 @@ namespace MemoryCacheHelper
         /// <returns></returns>
         public T AddOrGetExisting<T>(string key, Func<T> valueFunction, CacheItemPolicy policy = null)
         {
-            //if (this._isWiping) { return default(T); }
-
             bool found;
             T value = this.Get<T>(key, out found);
 
-            if (!found)
+            if (!found && !this._isWiping)
             {
-                //TODO: prevent a write if currenlty being wiped
-
                 this._cacheKeysBeingHandled.TryAdd(key, new CacheKeyBeingHandled());
 
                 lock (this._cacheKeysBeingHandled[key].Lock)
                 {
                     // re-check to see if another thread beat us to setting this value
                     value = this.Get<T>(key, out found);
-                    if (!found)
+                    if (!found && !this._isWiping)
                     {
                         // put the function into it's own thread (so it can be cancelled)
                         this._cacheKeysBeingHandled[key].ValueFunctionThread = new Thread(() => {
 
                             var aborted = false;
+                            var success = false;
 
                             try
                             {
                                 value = valueFunction();
+                                success = true;
                             }
                             catch (ThreadAbortException)
                             {
@@ -50,10 +48,19 @@ namespace MemoryCacheHelper
                             finally
                             {
                                 if (aborted)
-                                {                                    
-                                    value = this.Get<T>(key);
+                                {
+                                    var abortedValue = this._cacheKeysBeingHandled[key].AbortedValue;
+
+                                    if (abortedValue is T)
+                                    {
+                                        value = (T)abortedValue;
+                                    }
+                                    else
+                                    {
+                                        value = default(T);
+                                    }
                                 }
-                                else
+                                else if (success)
                                 {
                                     if (value == null)
                                     {

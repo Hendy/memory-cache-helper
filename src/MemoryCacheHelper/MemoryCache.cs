@@ -42,6 +42,8 @@ namespace MemoryCacheHelper
         /// <param name="policy"></param>
         void IMemoryCacheDirect.Set(string key, object value, CacheItemPolicy policy)
         {
+            if (this._isWiping) { return; }
+            
             if (policy != null)
             {
                 this._memoryCache.Set(key, value, policy);

@@ -3,7 +3,7 @@
 namespace MemoryCacheHelper.Interfaces
 {
     /// <summary>
-    /// interface used so caller can target a specific method (which would normally conflict with an existing override)
+    /// interface used to call operations directly on the wrapped memory cache
     /// </summary>
     internal interface IMemoryCacheDirect
     {

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using MemoryCacheHelper.Interfaces;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MemoryCacheHelper
 {
@@ -6,12 +8,12 @@ namespace MemoryCacheHelper
     {
         /// <summary>
         /// locker for the wipe method (no need to have them running concurrently)
-        /// Whislt wiping, nothing is written to the cache, and all responses return null
+        /// Whislt wiping, nothing else should write to cache
         /// </summary>
         private object _wipeLock = new object();
 
         /// <summary>
-        /// Wipe all cache items
+        /// Wipe will remove all items from cache, whilst this processes is in operation nothing else should write to cache
         /// </summary>
         internal void Wipe()
         {
@@ -19,12 +21,16 @@ namespace MemoryCacheHelper
             {
                 this._isWiping = true;
 
-                if (!this.IsEmpty())
+                Parallel.ForEach(this._cacheKeysBeingHandled, x => {
+                    x.Value.AbortedValue = null;
+                    x.Value.ValueFunctionThread.Abort();
+                });
+
+                while (!this.IsEmpty())
                 {
-                    foreach (var key in this._memoryCache.Select(x => x.Key))
-                    {
-                        this.Remove(key);
-                    }
+                    var keys = this._memoryCache.Select(x => x.Key);
+
+                    Parallel.ForEach(keys, x => ((IMemoryCacheDirect)this).Remove(x));
                 }
 
                 this._isWiping = false;

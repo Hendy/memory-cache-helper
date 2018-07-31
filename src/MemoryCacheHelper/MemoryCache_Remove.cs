@@ -13,10 +13,13 @@ namespace MemoryCacheHelper
         /// <param name="key">the key to the item to remove</param>
         public void Remove(string key)
         {
+            if (this._isWiping) { return; }
+
             ((IMemoryCacheDirect)this).Remove(key);
 
             if (this._cacheKeysBeingHandled.TryGetValue(key, out CacheKeyBeingHandled cacheKeyBeingHandled))
             {
+                cacheKeyBeingHandled.AbortedValue = null;
                 cacheKeyBeingHandled.ValueFunctionThread.Abort();
             }
         }
@@ -27,6 +30,8 @@ namespace MemoryCacheHelper
         /// <param name="keyEvaluationFunction">function to test a string cache key, and return true if it should be removed from cache</param>
         public void Remove(Func<string, bool> keyEvaluationFunction)
         {
+            if (this._isWiping) { return; }
+
             foreach (string key in this._memoryCache.Select(x => x.Key))
             {
                 if (keyEvaluationFunction(key))
