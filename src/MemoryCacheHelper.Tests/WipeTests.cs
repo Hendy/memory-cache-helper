@@ -27,38 +27,59 @@ namespace MemoryCacheHelper.Tests
             Assert.IsTrue(MemoryCache.Instance.IsEmpty());
         }
 
-        /// <summary>
-        /// Perform a wipe, whilst a long running function is setting a set
-        /// </summary>
         [TestMethod]
         public void Populating_Wipe()
         {
-            bool? output = null;
+
+        }
+
+        /// <summary>
+        /// Perform a wipe, whilst a long running function is executing
+        /// </summary>
+        [TestMethod]
+        public void Wipe_Cancels_Infinite_Function()
+        {
+            var output = "none";
             var started = false;
+            var finished = false;
 
             Task.Run(() =>
-            {
+            {               
                 output = MemoryCache.Instance.AddOrGetExisting(KEY, () =>
                 {
                     started = true;
 
                     while (true) { }; // infinite loop
 
-                    return false;
+                    return "infinite";
                 });
 
+                finished = true;
             });
 
-            //while (!started) { }
+            if (!SpinWait.SpinUntil(() => started, 100))
+            {
+                Assert.Inconclusive("First call didn't start in time");
+            }
+            else
+            {
+                Assert.IsTrue(started);
+                MemoryCache.Instance.Wipe();
 
-            Thread.Sleep(100); // allow time for the expensive func to start
+                if (!SpinWait.SpinUntil(() => finished, 100))
+                {
+                    Assert.Inconclusive("First call didn't finish in time");
+                }
+                else
+                {
+                    Assert.IsNull(output);
+                }
+            }
+        }
 
-            Assert.IsTrue(started);
-            Assert.IsNull(output);
+        public void Loads_Of_Data_Wipe()
+        {
 
-            MemoryCache.Instance.Wipe();
-
-            Assert.IsNull(output);
         }
     }
 }

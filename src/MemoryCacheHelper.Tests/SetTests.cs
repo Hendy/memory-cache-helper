@@ -13,8 +13,9 @@ namespace MemoryCacheHelper.Tests
         [TestMethod]
         public void Cancel_Long_Running_Function()
         {
-            bool? output = null;
+            var output = "none";
             var started = false;
+            var finished = false;
 
             Task.Run(() =>
             {
@@ -24,25 +25,40 @@ namespace MemoryCacheHelper.Tests
 
                     while (true) { }; // infinite loop
 
-                    return false;
+                    return "infinite";
                 });
+
+                finished = true;
 
             });
 
-            //while (!started) { }
+            if (!SpinWait.SpinUntil(() => started, 100))
+            {
+                Assert.Inconclusive("First call didn't start in time");
+            }
+            else
+            {
+                Assert.IsTrue(started);
 
-            Thread.Sleep(100); // allow time for the expensive func to start
+                // there shouldn't be an item, as the infinite loop prevents the set
+                Assert.IsFalse(MemoryCache.Instance.HasKey(KEY));
 
-            Assert.IsTrue(started);
-            Assert.IsFalse(output.HasValue);
-            Assert.IsFalse(MemoryCache.Instance.HasKey(KEY));
+                // immediately set the cache item, cancelling the infinite loop
+                MemoryCache.Instance.Set(KEY, "cancel");
 
-            MemoryCache.Instance.Set(KEY, true); // this should cancel the infinite loop method, triggering it's output to be set from this
+                Assert.IsTrue(MemoryCache.Instance.HasKey(KEY));
+                Assert.AreEqual("cancel", MemoryCache.Instance.Get<string>(KEY));
 
-            Assert.IsTrue(MemoryCache.Instance.HasKey(KEY));
-            Assert.IsTrue(MemoryCache.Instance.Get<bool>(KEY));
-            Assert.IsTrue(output.HasValue);
-            Assert.IsTrue(output.Value);
+                // wait for the cancelled task to finish
+                if (!SpinWait.SpinUntil(() => finished, 100))
+                {
+                    Assert.Inconclusive("First call didn't finish in time");
+                }
+                else
+                {
+                    Assert.AreEqual("cancel", output);
+                }
+            }
         }
     }
 }

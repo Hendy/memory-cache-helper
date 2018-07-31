@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,30 +19,36 @@ namespace MemoryCacheHelper.Tests
         }
 
         /// <summary>
-        /// the first function should block any others
+        /// the first function to set a cache item should block any further functions on that key
         /// </summary>
         [TestMethod]
         public void Ensure_First_Function_Wins()
         {
-            var output = false;
+            var output = "none";
             var started = false;
 
             Task.Run(() => {
                 output = MemoryCache.Instance.AddOrGetExisting(KEY, () => {
                     started = true;
                     Thread.Sleep(250);
-                    return true;
+                    return "first";
                 });
             });
 
-            //while (!started) { };
-            Thread.Sleep(50); // give the task enough time to make it's lock
-            Assert.IsTrue(started);
+            if (! SpinWait.SpinUntil(() => started, 100))
+            {
+                Assert.Inconclusive("First call didn't start in time");
+            }
+            else
+            {
+                Assert.IsTrue(started);
 
-            MemoryCache.Instance.AddOrGetExisting(KEY, () => false); // this should be blocked, so it's value not set
+                // this should be blocked, so it's value should not be set
+                MemoryCache.Instance.AddOrGetExisting(KEY, () => "second");
 
-            Assert.IsTrue(MemoryCache.Instance.Get<bool>(KEY));  // expect the result from the task
-            Assert.IsTrue(output);
+                Assert.AreEqual("first", MemoryCache.Instance.Get<string>(KEY));
+                Assert.AreEqual("first", output);
+            }
         }
     }
 }
