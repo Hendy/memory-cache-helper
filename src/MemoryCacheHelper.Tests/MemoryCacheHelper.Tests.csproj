@@ -51,7 +51,6 @@
   <ItemGroup>
     <Compile Include="BaseTests.cs" />
     <Compile Include="AddOrGetExistingTests.cs" />
-    <Compile Include="GetOrderedKeysTests.cs" />
     <Compile Include="RemoveTests.cs" />
     <Compile Include="HasKeyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

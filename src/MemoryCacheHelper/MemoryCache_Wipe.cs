@@ -1,4 +1,5 @@
 ﻿using MemoryCacheHelper.Interfaces;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,20 +22,17 @@ namespace MemoryCacheHelper
 
             lock (this._wipeLock)
             {
+                if (this._isWiping) { return; }
+
                 this._isWiping = true;
 
-                while (!this.IsEmpty())
+                var keys = this._memoryCache.Select(x => x.Key);
+
+                Parallel.ForEach(keys, x => ((IMemoryCacheDirect)this).Remove(x));
+
+                if (keys.Any())
                 {
-                    var keys = this._memoryCache.Select(x => x.Key);
-
-                    Parallel.ForEach(keys, x => ((IMemoryCacheDirect)this).Remove(x));
-
-                    if (keys.Any())
-                    {
-                        // TODO: report keys still present here (there shouldn't be any!)
-
-                        throw new System.Exception();
-                    }
+                    throw new Exception();
                 }
 
                 this._isWiping = false;

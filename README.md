@@ -7,17 +7,15 @@ A singleton wrapper around an System.Runtime.Caching.MemoryCache instance, provi
 	{
 		public sealed class MemoryCache
 		{	
-			// Properties
-
-			public static MemoryCache Insance { get; } // Singleton instance			
+			public static MemoryCache Instance { get; } // Singleton instance			
 			
 			public string Name { get; } // unique name of wrapped memory cache
 
-			public CacheItemPolicy DefaultCacheItemPolicy { set; }
+			TODO: public CacheItemPolicy DefaultCacheItemPolicy { set; }
 
-			// Methods
+			public void Set(string key, object value, CacheItemPolicy policy = null) { ... }
 
-			public void Set(string key, object value, CacheItemPolicy policy = null) { }
+			TODO: public void Set(string key, Func<object> valueFunction, CacheItemPolicy policy = null) { ... }
 
 			public T Get<T>(string key) { }
 
@@ -31,10 +29,6 @@ A singleton wrapper around an System.Runtime.Caching.MemoryCache instance, provi
 
 			public bool IsEmpty() { }
 
-			// Wrapped Methods
-
 			TODO: public long Trim(int percent)
-
-
 		}
 	}

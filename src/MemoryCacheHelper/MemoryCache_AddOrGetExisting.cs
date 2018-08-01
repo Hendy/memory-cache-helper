@@ -22,7 +22,7 @@ namespace MemoryCacheHelper
 
             if (!found)
             {
-                this._cacheKeysBeingHandled.TryAdd(key, new CacheKeyBeingHandled());
+                this._cacheKeysBeingHandled.TryAdd(key, new CacheKeyBeingHandled(typeof(T)));
 
                 lock (this._cacheKeysBeingHandled[key].Lock)
                 {
@@ -31,7 +31,7 @@ namespace MemoryCacheHelper
                     if (!found)
                     {
                         // put the function into it's own thread (so it can be cancelled)
-                        this._cacheKeysBeingHandled[key].ValueFunctionThread = new Thread(() => {
+                        this._cacheKeysBeingHandled[key].Thread = new Thread(() => {
 
                             var aborted = false;
                             var success = false;
@@ -49,29 +49,24 @@ namespace MemoryCacheHelper
                             {
                                 if (aborted)
                                 {
-                                    value = this.Get<T>(key, out found);
-
-                                    if (!found)
-                                    {
-                                        throw new NullReferenceException();
-                                    }
+                                    value = (T)this._cacheKeysBeingHandled[key].Value; // cast should always be valid
                                 }
                                 else if (success)
                                 {
-                                    if (value != null)
+                                    if (value == null)
                                     {
-                                        ((IMemoryCacheDirect)this).Set(key, value, policy);
+                                        ((IMemoryCacheDirect)this).Remove(key);
                                     }
                                     else
                                     {
-                                        ((IMemoryCacheDirect)this).Remove(key);
+                                        ((IMemoryCacheDirect)this).Set(key, value, policy);
                                     }
                                 }
                             }
                         });
 
-                        this._cacheKeysBeingHandled[key].ValueFunctionThread.Start();
-                        this._cacheKeysBeingHandled[key].ValueFunctionThread.Join();
+                        this._cacheKeysBeingHandled[key].Thread.Start();
+                        this._cacheKeysBeingHandled[key].Thread.Join();
                     }
                 }
 

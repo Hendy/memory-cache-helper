@@ -1,8 +1,6 @@
 ﻿using MemoryCacheHelper.Interfaces;
 using MemoryCacheHelper.Models;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Caching;
 
 namespace MemoryCacheHelper
@@ -25,25 +23,22 @@ namespace MemoryCacheHelper
         private bool _isWiping = false;
 
         /// <summary>
-        /// Enumerates sorting the collection of cache keys
-        /// (not in it's own partial yet, as not public)
+        /// flag indicating whether a setting method is currently being executed
         /// </summary>
-        /// <returns></returns>
-        internal IEnumerable<string> GetOrderedKeys()
-        {
-            return this._memoryCache.Select(x => x.Key).OrderBy(x => x);
-        }
+        private bool _isSetting = false;
 
         /// <summary>
         /// The core method that directly sets a value in the wrapped memory cache
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <param name="policy"></param>
+        /// <param name="key">key of cache item to set</param>
+        /// <param name="value">value to set</param>
+        /// <param name="policy">optoinal eviction policy</param>
         void IMemoryCacheDirect.Set(string key, object value, CacheItemPolicy policy)
         {
             // TODO: if wiping then lock here
-            
+
+            this._isSetting = true;
+
             if (policy != null)
             {
                 this._memoryCache.Set(key, value, policy);
@@ -52,12 +47,14 @@ namespace MemoryCacheHelper
             {
                 this._memoryCache[key] = value;
             }
+
+            this._isSetting = false;
         }
 
         /// <summary>
         /// The core method that direcly removes an item from the wrapped memory cache
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="key">key of cache item to remove</param>
         void IMemoryCacheDirect.Remove(string key)
         {
             this._memoryCache.Remove(key);

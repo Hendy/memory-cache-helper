@@ -1,5 +1,6 @@
 ﻿using MemoryCacheHelper.Interfaces;
 using MemoryCacheHelper.Models;
+using System;
 using System.Runtime.Caching;
 
 namespace MemoryCacheHelper
@@ -16,17 +17,17 @@ namespace MemoryCacheHelper
         {
             if (value != null)
             {
-                // TODO: lock but only if currently wiping
-
                 ((IMemoryCacheDirect)this).Set(key, value, policy);
 
+                // if there's currently a function opterating on this key
                 if (this._cacheKeysBeingHandled.TryGetValue(key, out CacheKeyBeingHandled cacheKeyBeingHandled))
                 {
-                    // if this set was faster than any currently executing function (attempting to set the same type) then
-                    // cancel it, and let it return this value too
-
-
-                    cacheKeyBeingHandled.ValueFunctionThread.Abort();
+                    // if it wants the same type, then cancel it and give it this value
+                    if (cacheKeyBeingHandled.Type == value.GetType())
+                    {
+                        cacheKeyBeingHandled.Value = value;
+                        cacheKeyBeingHandled.Thread.Abort();
+                    }
                 }
             }
             else
@@ -36,5 +37,16 @@ namespace MemoryCacheHelper
                 this.Remove(key);
             }
         }
+
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="key"></param>
+        ///// <param name="valueFunction"></param>
+        ///// <param name="policy"></param>
+        //public void Set(string key, Func<object> valueFunction, CacheItemPolicy policy = null)
+        //{
+
+        //}
     }
 }
