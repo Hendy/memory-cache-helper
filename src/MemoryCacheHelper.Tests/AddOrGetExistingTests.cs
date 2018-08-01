@@ -19,7 +19,7 @@ namespace MemoryCacheHelper.Tests
         }
 
         /// <summary>
-        /// the first function to set a cache item should block any further functions on that key
+        /// the first function to attempt to add a cache item, should block any further functions on that key
         /// </summary>
         [TestMethod]
         public void Ensure_First_Function_Wins()
@@ -49,6 +49,17 @@ namespace MemoryCacheHelper.Tests
                 Assert.AreEqual("first", MemoryCache.Instance.Get<string>(KEY));
                 Assert.AreEqual("first", output);
             }
+        }
+
+        /// <summary>
+        /// a call to AddOrGetExisting should never return empty - currenlty a wipe may cause this to happen
+        /// </summary>
+        [TestMethod]
+        public void Handle_Function_Timeouts()
+        {
+
+
+
         }
     }
 }

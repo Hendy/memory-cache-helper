@@ -10,9 +10,7 @@
         /// <returns>an object from cache of type T, else default(T)</returns>
         public T Get<T>(string key)
         {
-            bool found;
-
-            return this.Get<T>(key, out found);
+            return this.Get<T>(key, out bool found);
         }
 
         /// <summary>

@@ -20,7 +20,7 @@ namespace MemoryCacheHelper
             bool found;
             T value = this.Get<T>(key, out found);
 
-            if (!found && !this._isWiping)
+            if (!found)
             {
                 this._cacheKeysBeingHandled.TryAdd(key, new CacheKeyBeingHandled());
 
@@ -28,7 +28,7 @@ namespace MemoryCacheHelper
                 {
                     // re-check to see if another thread beat us to setting this value
                     value = this.Get<T>(key, out found);
-                    if (!found && !this._isWiping)
+                    if (!found)
                     {
                         // put the function into it's own thread (so it can be cancelled)
                         this._cacheKeysBeingHandled[key].ValueFunctionThread = new Thread(() => {
@@ -49,26 +49,22 @@ namespace MemoryCacheHelper
                             {
                                 if (aborted)
                                 {
-                                    var abortedValue = this._cacheKeysBeingHandled[key].AbortedValue;
+                                    value = this.Get<T>(key, out found);
 
-                                    if (abortedValue is T)
+                                    if (!found)
                                     {
-                                        value = (T)abortedValue;
-                                    }
-                                    else
-                                    {
-                                        value = default(T);
+                                        throw new NullReferenceException();
                                     }
                                 }
                                 else if (success)
                                 {
-                                    if (value == null)
+                                    if (value != null)
                                     {
-                                        ((IMemoryCacheDirect)this).Remove(key);
+                                        ((IMemoryCacheDirect)this).Set(key, value, policy);
                                     }
                                     else
                                     {
-                                        ((IMemoryCacheDirect)this).Set(key, value, policy);
+                                        ((IMemoryCacheDirect)this).Remove(key);
                                     }
                                 }
                             }

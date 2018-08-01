@@ -16,10 +16,5 @@ namespace MemoryCacheHelper.Models
         /// Handle to thread running consumer function
         /// </summary>
         internal Thread ValueFunctionThread { get; set; }
-
-        /// <summary>
-        /// Value returned to the ValueFunctionThread if was aborted
-        /// </summary>
-        internal object AbortedValue { get; set; }
     }
 }

@@ -34,48 +34,48 @@ namespace MemoryCacheHelper.Tests
         }
 
         /// <summary>
-        /// Perform a wipe, whilst a long running function is executing
-        /// </summary>
-        [TestMethod]
-        public void Wipe_Cancels_Infinite_Function()
-        {
-            var output = "none";
-            var started = false;
-            var finished = false;
+        ///// Perform a wipe, whilst a long running function is executing
+        ///// </summary>
+        //[TestMethod]
+        //public void Wipe_Cancels_Infinite_Function()
+        //{
+        //    var output = "none";
+        //    var started = false;
+        //    var finished = false;
 
-            Task.Run(() =>
-            {               
-                output = MemoryCache.Instance.AddOrGetExisting(KEY, () =>
-                {
-                    started = true;
+        //    Task.Run(() =>
+        //    {               
+        //        output = MemoryCache.Instance.AddOrGetExisting(KEY, () =>
+        //        {
+        //            started = true;
 
-                    while (true) { }; // infinite loop
+        //            while (true) { }; // infinite loop
 
-                    return "infinite";
-                });
+        //            return "infinite";
+        //        });
 
-                finished = true;
-            });
+        //        finished = true;
+        //    });
 
-            if (!SpinWait.SpinUntil(() => started, 100))
-            {
-                Assert.Inconclusive("First call didn't start in time");
-            }
-            else
-            {
-                Assert.IsTrue(started);
-                MemoryCache.Instance.Wipe();
+        //    if (!SpinWait.SpinUntil(() => started, 100))
+        //    {
+        //        Assert.Inconclusive("First call didn't start in time");
+        //    }
+        //    else
+        //    {
+        //        Assert.IsTrue(started);
+        //        MemoryCache.Instance.Wipe();
 
-                if (!SpinWait.SpinUntil(() => finished, 100))
-                {
-                    Assert.Inconclusive("First call didn't finish in time");
-                }
-                else
-                {
-                    Assert.IsNull(output);
-                }
-            }
-        }
+        //        if (!SpinWait.SpinUntil(() => finished, 100))
+        //        {
+        //            Assert.Inconclusive("First call didn't finish in time");
+        //        }
+        //        else
+        //        {
+        //            Assert.IsNull(output);
+        //        }
+        //    }
+        //}
 
         public void Loads_Of_Data_Wipe()
         {
