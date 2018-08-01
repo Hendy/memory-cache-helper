@@ -16,7 +16,7 @@ namespace MemoryCacheHelper
         /// <summary>
         /// Wipe will remove all items from cache, holding current sets until the wipe operation is complete
         /// </summary>
-        internal void Wipe()
+        public void Wipe()
         {
             if (this._isWiping) { return; }
 
