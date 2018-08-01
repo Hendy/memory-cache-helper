@@ -1,6 +1,7 @@
 ﻿using MemoryCacheHelper.Interfaces;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MemoryCacheHelper
@@ -8,13 +9,12 @@ namespace MemoryCacheHelper
     public sealed partial class MemoryCache
     {
         /// <summary>
-        /// locker for the wipe method
-        /// Whislt wiping, nothing else should write to cache
+        /// locker object
         /// </summary>
         private object _wipeLock = new object();
 
         /// <summary>
-        /// Wipe will remove all items from cache, whilst this processes is in operation nothing else should write to cache
+        /// Wipe will remove all items from cache, holding current sets until the wipe operation is complete
         /// </summary>
         internal void Wipe()
         {
@@ -26,13 +26,15 @@ namespace MemoryCacheHelper
 
                 this._isWiping = true;
 
+                SpinWait.SpinUntil(() => !this._isSetting); // wait until all running set operations are complete
+
                 var keys = this._memoryCache.Select(x => x.Key);
 
                 Parallel.ForEach(keys, x => ((IMemoryCacheDirect)this).Remove(x));
 
                 if (keys.Any())
                 {
-                    throw new Exception();
+                    throw new Exception("Unable to remove keys: " + string.Join(", ", keys));
                 }
 
                 this._isWiping = false;

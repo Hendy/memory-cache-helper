@@ -7,6 +7,15 @@ namespace MemoryCacheHelper
     public sealed partial class MemoryCache
     {
         /// <summary>
+        /// The core method that direcly removes an item from the wrapped memory cache
+        /// </summary>
+        /// <param name="key">key of cache item to remove</param>
+        void IMemoryCacheDirect.Remove(string key)
+        {
+            this._memoryCache.Remove(key);
+        }
+
+        /// <summary>
         /// Remove an item from cache
         /// </summary>
         /// <param name="key">the key to the item to remove</param>

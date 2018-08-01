@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Threading;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MemoryCacheHelper.Tests
@@ -27,59 +28,34 @@ namespace MemoryCacheHelper.Tests
             Assert.IsTrue(MemoryCache.Instance.IsEmpty());
         }
 
+        /// <summary>
+        /// Perform a wipe, whilst a thread is populating the cache
+        /// Whilst wiping, the set operations should be blocked
+        /// The wipe should complete, and the set opertions resumed
+        /// </summary>
         [TestMethod]
         public void Populating_Wipe()
         {
+            var setSomeItems = new Action<int>((count) => {
+                for (int i = 0; i < count; i++)
+                {
+                    var key = Guid.NewGuid().ToString();
+                    var value = DateTime.Now;
 
-        }
+                    MemoryCache.Instance.Set(key, value);
+                }
+            });
 
-        /// <summary>
-        ///// Perform a wipe, whilst a long running function is executing
-        ///// </summary>
-        //[TestMethod]
-        //public void Wipe_Cancels_Infinite_Function()
-        //{
-        //    var output = "none";
-        //    var started = false;
-        //    var finished = false;
+            Assert.IsTrue(MemoryCache.Instance.IsEmpty());
 
-        //    Task.Run(() =>
-        //    {               
-        //        output = MemoryCache.Instance.AddOrGetExisting(KEY, () =>
-        //        {
-        //            started = true;
+            setSomeItems(5000);
 
-        //            while (true) { }; // infinite loop
+            Assert.IsFalse(MemoryCache.Instance.IsEmpty());
+            Assert.AreEqual(5000, MemoryCache.Instance.GetKeys().Count());
 
-        //            return "infinite";
-        //        });
+            Parallel.Invoke(() => MemoryCache.Instance.Wipe(), () => setSomeItems(1000));
 
-        //        finished = true;
-        //    });
-
-        //    if (!SpinWait.SpinUntil(() => started, 100))
-        //    {
-        //        Assert.Inconclusive("First call didn't start in time");
-        //    }
-        //    else
-        //    {
-        //        Assert.IsTrue(started);
-        //        MemoryCache.Instance.Wipe();
-
-        //        if (!SpinWait.SpinUntil(() => finished, 100))
-        //        {
-        //            Assert.Inconclusive("First call didn't finish in time");
-        //        }
-        //        else
-        //        {
-        //            Assert.IsNull(output);
-        //        }
-        //    }
-        //}
-
-        public void Loads_Of_Data_Wipe()
-        {
-
-        }
+            Assert.AreEqual(1000, MemoryCache.Instance.GetKeys().Count());
+        }    
     }
 }

@@ -2,11 +2,58 @@
 using MemoryCacheHelper.Models;
 using System;
 using System.Runtime.Caching;
+using System.Threading;
 
 namespace MemoryCacheHelper
 {
     public sealed partial class MemoryCache
     {
+        /// <summary>
+        /// locker object
+        /// </summary>
+        private object _setLock = new object();
+
+        /// <summary>
+        /// The core method that directly sets a value in the wrapped memory cache
+        /// </summary>
+        /// <param name="key">key of cache item to set</param>
+        /// <param name="value">value to set</param>
+        /// <param name="policy">optoinal eviction policy</param>
+        void IMemoryCacheDirect.Set(string key, object value, CacheItemPolicy policy)
+        {
+            // the actual set operation
+            var set = new Action(() => {
+
+                this._isSetting = true;
+
+                if (policy != null)
+                {
+                    this._memoryCache.Set(key, value, policy);
+                }
+                else
+                {
+                    this._memoryCache[key] = value;
+                }
+
+                this._isSetting = false;
+
+            });
+
+            if (!this._isWiping)
+            {
+                set();
+            }
+            else // hold the set until wiping is complete
+            {
+                lock (this._setLock) // is it better to lock, or have all SpinWait ?
+                {
+                    SpinWait.SpinUntil(() => !this._isWiping); // wait until wipe complete
+
+                    set();
+                }
+            }
+        }
+
         /// <summary>
         /// Inserts a cache entry into the cache by using a key and a value and eviction
         /// </summary>
