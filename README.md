@@ -1,29 +1,26 @@
 # MemoryCacheHelper
 
+A singleton wrapper around an System.Runtime.Caching.MemoryCache instance, providing thread-safe helper methods.
+
     @using MemoryCacheHelper
 
-	// Set a typed value in cache (any function currently setting this key is cancelled)
+	// Set a typed value
 	MemoryCache.Instance.Set("myKey", myObject);
 
-	// Get a typed value from cache
+	// Get a typed value
 	var myObject = MemoryCache.Instance.Get<MyObject>("myKey"); 
 
-	// Ensure result of a function is in cache and return it
-	// This handles thread blocking (on a per key basis) such that only the first function is executed
-	// If another thread directly sets this key, then this function is cancelled and the result returned from cache
-	var myObject = MemoryCache.Instance.AddOrGetExisting<MyObject>("myKey", () => {
-		// some (potentially) long running function
+	// Get or set if empty, a typed value by function
+	var myObject = MemoryCache.Instance.AddOrGetExisting<MyObject>("myKey", () => {		
+		// can be a long running function here
 		return new MyObject();
 	});
 
-	// Check to see if a cache key is in use
+	// Does cache item exist
 	bool hasKey = MemoryCache.HasKey("myKey");
 
-	// Remove a cache item
+	// Remove cache item
 	MemoryCache.Instance.Remove("myKey");
-	or
-	MemoryCache.Instance.Set("myKey", null);
 		
-	// Use a function, Func<string, bool> to remove cache items
-	// The function is evaluated against all keys and those returning true are removed
+	// Remove cache items by function
 	MemoryCache.Instance.Remove(x => x.StartsWith("myKeyPrefix"));

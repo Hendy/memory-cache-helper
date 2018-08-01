@@ -36,6 +36,7 @@ namespace MemoryCacheHelper
 
         /// <summary>
         /// The core method that directly sets a value in the wrapped memory cache
+        /// only accessable via internal interface (couldn't be private, as would be an override conflict)
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -56,6 +57,7 @@ namespace MemoryCacheHelper
 
         /// <summary>
         /// The core method that direcly removes an item from the wrapped memory cache
+        /// only accessable via internal interface (couldn't be private, as would be an override conflict)
         /// </summary>
         /// <param name="key"></param>
         void IMemoryCacheDirect.Remove(string key)
