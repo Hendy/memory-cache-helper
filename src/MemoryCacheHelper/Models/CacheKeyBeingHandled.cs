@@ -21,20 +21,20 @@ namespace MemoryCacheHelper.Models
         /// <summary>
         /// The return type of the value function
         /// </summary>
-        internal Type Type { get; private set; }
+        internal Type Type { get; set; }
 
         /// <summary>
         /// The directly set value (beating any function evaluation)
         /// </summary>
         internal object Value { get; set; }
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="type"></param>
-        internal CacheKeyBeingHandled(Type type)
-        {
-            this.Type = type;
-        }
+        ///// <summary>
+        ///// Constructor
+        ///// </summary>
+        ///// <param name="type"></param>
+        //internal CacheKeyBeingHandled(Type type)
+        //{
+        //    this.Type = type;
+        //}
     }
 }

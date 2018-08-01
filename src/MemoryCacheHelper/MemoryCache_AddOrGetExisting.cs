@@ -23,7 +23,7 @@ namespace MemoryCacheHelper
 
             if (!found)
             {
-                this._cacheKeysBeingHandled.TryAdd(key, new CacheKeyBeingHandled(typeof(T)));
+                this._cacheKeysBeingHandled.TryAdd(key, new CacheKeyBeingHandled());
 
                 lock (this._cacheKeysBeingHandled[key].Lock)
                 {
@@ -31,6 +31,8 @@ namespace MemoryCacheHelper
                     value = this.Get<T>(key, out found);
                     if (!found)
                     {
+                        this._cacheKeysBeingHandled[key].Type = typeof(T);
+
                         // put the function into it's own thread (so it can be cancelled)
                         this._cacheKeysBeingHandled[key].Thread = new Thread(() => {
 
@@ -56,7 +58,10 @@ namespace MemoryCacheHelper
                                 {
                                     if (value == null)
                                     {
-                                        ((IMemoryCacheDirect)this).Remove(key);
+                                        if (!this._isWiping)
+                                        {
+                                            ((IMemoryCacheDirect)this).Remove(key);
+                                        }
                                     }
                                     else
                                     {
