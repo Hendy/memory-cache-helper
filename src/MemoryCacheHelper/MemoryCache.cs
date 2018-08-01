@@ -10,7 +10,7 @@ namespace MemoryCacheHelper
     public sealed partial class MemoryCache : IMemoryCacheDirect
     {
         /// <summary>
-        /// Locker collection of all cache keys currently having their 'expensive functions' evaluated
+        /// Locker collection of all cache keys currently executing a function to set a cache item
         /// </summary>
         private ConcurrentDictionary<string, CacheKeyBeingHandled> _cacheKeysBeingHandled;
 

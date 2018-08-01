@@ -2,25 +2,39 @@
 
 A singleton wrapper around an System.Runtime.Caching.MemoryCache instance, providing thread-safe helper methods.
 
-    @using MemoryCacheHelper
 
-	// Set a typed value
-	MemoryCache.Instance.Set("myKey", myObject);
+	namespace MemoryCacheHelper
+	{
+		public sealed class MemoryCache
+		{	
+			// Properties
 
-	// Get a typed value
-	var myObject = MemoryCache.Instance.Get<MyObject>("myKey"); 
+			public static MemoryCache Insance { get; } // Singleton instance			
+			
+			public string Name { get; } // unique name of wrapped memory cache
 
-	// Get or set if empty, a typed value by function
-	var myObject = MemoryCache.Instance.AddOrGetExisting<MyObject>("myKey", () => {		
-		// can be a long running function here
-		return new MyObject();
-	});
+			public CacheItemPolicy DefaultCacheItemPolicy { set; }
 
-	// Does cache item exist
-	bool hasKey = MemoryCache.HasKey("myKey");
+			// Methods
 
-	// Remove cache item
-	MemoryCache.Instance.Remove("myKey");
-		
-	// Remove cache items by function
-	MemoryCache.Instance.Remove(x => x.StartsWith("myKeyPrefix"));
+			public void Set(string key, object value, CacheItemPolicy policy = null) { }
+
+			public T Get<T>(string key) { }
+
+			public T Get<T>(string key, bool found) { }
+
+			public T AddOrGetExisting<T>(string key, Func<T> valueFunction, CacheItemPolicy policy = null) { }
+
+			public bool HasKey(string key) { }
+
+			TODO: public IEnumerable<string> GetKeys() { }
+
+			public bool IsEmpty() { }
+
+			// Wrapped Methods
+
+			TODO: public long Trim(int percent)
+
+
+		}
+	}
