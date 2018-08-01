@@ -45,9 +45,9 @@ namespace MemoryCacheHelper
             }
             else // hold the set until wiping is complete
             {
-                lock (this._setLock) // is it better to lock, or have all SpinWait ?
+                lock (this._setLock)
                 {
-                    SpinWait.SpinUntil(() => !this._isWiping); // wait until wipe complete
+                    SpinWait.SpinUntil(() => !this._isWiping); // keep one thread watching until wipe complete
 
                     set();
                 }
@@ -55,11 +55,11 @@ namespace MemoryCacheHelper
         }
 
         /// <summary>
-        /// Inserts a cache entry into the cache by using a key and a value and eviction
+        /// Inserts a cache entry into the cache by using a key and a value and optional eviction
         /// </summary>
         /// <param name="key">A unique identifier for the cache entry to insert</param>
         /// <param name="value">The data for the cache entry</param>
-        /// <param name="policy">(Optionl) An object that contains eviction details for the cache entry. This object provides more options for eviction than a simple absolute expiration</param>
+        /// <param name="policy">(Optional) An object that contains eviction details for the cache entry</param>
         public void Set(string key, object value, CacheItemPolicy policy = null)
         {
             if (value != null)

@@ -17,12 +17,12 @@ namespace MemoryCacheHelper
         private System.Runtime.Caching.MemoryCache _memoryCache;
 
         /// <summary>
-        /// flag indicating whether the wipe method is currenly being executed
+        /// Flag indicating whether the wipe method is currently being executed
         /// </summary>
         private bool _isWiping = false;
 
         /// <summary>
-        /// flag indicating whether non waitable set action is occuring
+        /// Flag indicating whether any non waitable set action is currently occuring
         /// </summary>
         private bool _isSetting = false;
     }
