@@ -32,12 +32,17 @@ namespace MemoryCacheHelper
 
                 Parallel.ForEach(keys, x => ((IMemoryCacheDirect)this).Remove(x));
 
-                if (keys.Any())
+                try
                 {
-                    throw new Exception("Unable to remove keys: " + string.Join(", ", keys));
+                    if (keys.Any())
+                    {
+                        throw new Exception("Unable to remove keys: " + string.Join(", ", keys));
+                    }
                 }
-
-                this._isWiping = false;
+                finally
+                {
+                    this._isWiping = false;
+                }
             }
         }
     }
