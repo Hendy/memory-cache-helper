@@ -69,16 +69,21 @@ namespace MemoryCacheHelper
 
                 policy = policy ?? this.DefaultCacheItemPolicy;
 
-                if (policy != null)
+                try
                 {
-                    this._memoryCache.Set(key, value, policy);
+                    if (policy != null)
+                    {
+                        this._memoryCache.Set(key, value, policy);
+                    }
+                    else
+                    {
+                        this._memoryCache[key] = value;
+                    }
                 }
-                else
+                finally
                 {
-                    this._memoryCache[key] = value;
+                    this._isSetting = false;
                 }
-
-                this._isSetting = false;
 
             });
 
