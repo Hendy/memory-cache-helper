@@ -1,4 +1,5 @@
 ﻿using MemoryCacheHelper.Interfaces;
+using MemoryCacheHelper.Models;
 using System;
 using System.Runtime.Caching;
 
@@ -10,5 +11,13 @@ namespace MemoryCacheHelper
         {
             this.AddOrGetExisting(key, valueFunction, policy);
         }
+
+        //public void Add(string key, object value, CacheItemPolicy policy = null)
+        //{
+        //    if (!this.HasKey(key))
+        //    {
+        //        this.Set(key, value, policy);
+        //    }
+        //}
     }
 }

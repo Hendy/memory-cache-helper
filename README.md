@@ -26,7 +26,7 @@ A singleton wrapper around an System.Runtime.Caching.MemoryCache instance, provi
 
 	public IEnumerable<string> GetKeys() {}
 
-	public T GetSet(string Key, Func<T> valueFunction, CacheItemPolicy = null) {} // same as AddOrGetExisting
+	public T GetSet<T>(string Key, Func<T> valueFunction, CacheItemPolicy = null) {} // same as AddOrGetExisting
 
 	public bool HasKey(string key) {}
 
