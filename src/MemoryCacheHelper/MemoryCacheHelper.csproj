@@ -45,6 +45,8 @@
     <Compile Include="MemoryCache_GetKeys.cs" />
     <Compile Include="MemoryCache_Contains.cs" />
     <Compile Include="MemoryCache_GetSet.cs" />
+    <Compile Include="MemoryCache_IsSetting.cs" />
+    <Compile Include="MemoryCache_IsWiping.cs" />
     <Compile Include="MemoryCache_Name.cs" />
     <Compile Include="MemoryCache_Trim.cs" />
     <Compile Include="Models\CacheKeyBeingHandled.cs" />

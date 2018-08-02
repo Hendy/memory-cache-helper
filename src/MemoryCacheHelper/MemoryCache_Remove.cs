@@ -9,14 +9,14 @@ namespace MemoryCacheHelper
         /// <summary>
         /// Remove items from cache where a supplied function returns true for any given key
         /// </summary>
-        /// <param name="keyEvaluationFunction">function to test a string cache key, and return true if it should be removed from cache</param>
-        public void Remove(Func<string, bool> keyEvaluationFunction)
+        /// <param name="keyFunction">function to test a string cache key, and return true if it should be removed from cache</param>
+        public void Remove(Func<string, bool> keyFunction)
         {
             if (this._isWiping) { return; }
 
             foreach (string key in this._memoryCache.Select(x => x.Key))
             {
-                if (keyEvaluationFunction(key))
+                if (keyFunction(key))
                 {
                     this.Remove(key);
                 }

@@ -7,38 +7,50 @@ A singleton wrapper around an System.Runtime.Caching.MemoryCache instance, provi
 	{
 		public sealed class MemoryCache
 		{	
-			public static MemoryCache Instance { get; } // singleton instance			
+			// Properties
+
+			public static MemoryCache Instance { get; } // the singleton instance
 			
 			public string Name { get; } // unique name of wrapped memory cache
 
 			public CacheItemPolicy DefaultCacheItemPolicy { set; } // set an optional default
 
-			public void Set(string key, object value, CacheItemPolicy policy = null) { }
+			// Methods
 
-			TODO: public void Set(string key, Func<object> valueFunction, CacheItemPolicy policy = null) { }
+			public void Add(string key, Func<T> valueFunction, CacheItemPolicy policy = null) {}
 
-			public T Get<T>(string key) { }
+			public T AddOrGetExisting<T>(string key, Func<T> valueFunction, CacheItemPolicy policy = null) {}
 
-			public T Get<T>(string key, bool found) { }
+			public bool Contains(string key) {} // wrapper
 
-			public object Get(string key) { } // wrapper
+			public T Get<T>(string key) {}
 
-			pulbic void Add(string key, Func<T> valueFunction, CacheItemPolicy policy = null) { }
+			public T Get<T>(string key, out bool found) {}
 
-			public T AddOrGetExisting<T>(string key, Func<T> valueFunction, CacheItemPolicy policy = null) { }
+			public object Get(string key) {} // wrapper
 
-			TODO: public T GetSet<T>(string key, Funct<T> valueFunction, CacheItemPolicy policy = null) { } // alias for AddOrGetExisting
+			public IEnumerable<string> GetKeys() {}
 
-			public bool Contains(string key) { } // wrapper
+			public T GetSet(string Key, Func<T> valueFunction, CacheItemPolicy = null) {} // same as AddOrGetExisting
 
-			public bool HasKey(string key) { } // alias for Contains
+			public bool HasKey(string key) {}
 
-			public IEnumerable<string> GetKeys() { }
+			public bool IsEmpty() {}
 
-			public bool IsEmpty() { }
+			internal bool IsSetting() {}
 
-			public long Trim(int percent) { } // wrapper
+			internal bool IsWiping() {}
 
-			public void Wipe() { }
+			public void Remove(Func<string, bool> keyFunction) {}
+
+			public void Remove(string key) {}
+
+			public void Set(string key, Func<object> valueFunction, CacheItemPolicy policy = null) {}
+
+			public void Set(string key, object value, CacheItemPolicy policy = null) {}
+
+			public long Trim(int percent) {} // wrapper
+
+			public void Wipe() {}
 		}
 	}
