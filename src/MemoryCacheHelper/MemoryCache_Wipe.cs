@@ -26,7 +26,7 @@ namespace MemoryCacheHelper
 
                 this._isWiping = true;
 
-                SpinWait.SpinUntil(() => !this._isSetting); // wait until all running set operations are complete
+                SpinWait.SpinUntil(() => !this._isSetting); // wait until all running set operations are complete (new ones are blocked)
 
                 var keys = this._memoryCache.Select(x => x.Key);
 

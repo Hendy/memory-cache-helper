@@ -24,6 +24,8 @@ A singleton wrapper around an System.Runtime.Caching.MemoryCache instance, provi
 
 	public object Get(string key) {} // wrapper
 
+	internal long GetApproximateSize() {}
+
 	public IEnumerable<string> GetKeys() {}
 
 	public T GetSet<T>(string Key, Func<T> valueFunction, CacheItemPolicy = null) {} // same as AddOrGetExisting
