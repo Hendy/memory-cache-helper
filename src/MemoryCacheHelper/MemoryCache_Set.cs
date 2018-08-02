@@ -14,6 +14,28 @@ namespace MemoryCacheHelper
         private object _setLock = new object();
 
         /// <summary>
+        /// Inserts a cache entry into the cache by using a key and a function and optional eviction
+        /// </summary>
+        /// <param name="key">A unique identifier for the cache entry to insert</param>
+        /// <param name="valueFunction">A function to execute to get the value for the cache entry</param>
+        /// <param name="policy">(Optional) An object that contains eviction details for the cache entry</param>
+        public void Set(string key, Func<object> valueFunction, CacheItemPolicy policy = null)
+        {
+            if (key == null || valueFunction == null ) { return; }
+
+            this._cacheKeysBeingHandled.TryAdd(key, new CacheKeyBeingHandled());
+
+            lock (this._cacheKeysBeingHandled[key].Lock)
+            {
+                object value = null;
+
+                value = valueFunction();
+
+                this.Set(key, value, policy);
+            }
+        }
+
+        /// <summary>
         /// Inserts a cache entry into the cache by using a key and a value and optional eviction
         /// </summary>
         /// <param name="key">A unique identifier for the cache entry to insert</param>
@@ -21,6 +43,8 @@ namespace MemoryCacheHelper
         /// <param name="policy">(Optional) An object that contains eviction details for the cache entry</param>
         public void Set(string key, object value, CacheItemPolicy policy = null)
         {
+            if (key == null) { return; }
+
             if (value != null)
             {
                 ((IMemoryCacheDirect)this).Set(key, value, policy);
@@ -43,17 +67,6 @@ namespace MemoryCacheHelper
                 this.Remove(key);
             }
         }
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <param name="key"></param>
-        ///// <param name="valueFunction"></param>
-        ///// <param name="policy"></param>
-        //public void Set(string key, Func<object> valueFunction, CacheItemPolicy policy = null)
-        //{
-
-        //}
 
         /// <summary>
         /// The core method that directly sets a value in the wrapped memory cache
