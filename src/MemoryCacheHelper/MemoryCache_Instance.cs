@@ -11,7 +11,6 @@ namespace MemoryCacheHelper
     {
         /// <summary>
         /// Singleton instance of the <see cref="MemoryCache"/> class
-        /// defined in this file, as this is the only place it's used
         /// </summary>
         private static readonly Lazy<MemoryCache> _lazy = new Lazy<MemoryCache>(() => new MemoryCache());
 

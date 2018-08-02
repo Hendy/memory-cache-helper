@@ -52,7 +52,7 @@ namespace MemoryCacheHelper
                             {
                                 if (aborted)
                                 {
-                                    value = (T)this._cacheKeysBeingHandled[key].Value; // cast should always be valid
+                                    value = (T)this._cacheKeysBeingHandled[key].Value; // cast should always be valid as this method is the only thing that sets it
                                 }
                                 else if (success)
                                 {

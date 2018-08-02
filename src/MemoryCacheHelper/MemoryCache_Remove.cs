@@ -7,12 +7,20 @@ namespace MemoryCacheHelper
     public sealed partial class MemoryCache
     {
         /// <summary>
-        /// The core method that direcly removes an item from the wrapped memory cache
+        /// Remove items from cache where a supplied function returns true for any given key
         /// </summary>
-        /// <param name="key">key of cache item to remove</param>
-        void IMemoryCacheDirect.Remove(string key)
+        /// <param name="keyEvaluationFunction">function to test a string cache key, and return true if it should be removed from cache</param>
+        public void Remove(Func<string, bool> keyEvaluationFunction)
         {
-            this._memoryCache.Remove(key);
+            if (this._isWiping) { return; }
+
+            foreach (string key in this._memoryCache.Select(x => x.Key))
+            {
+                if (keyEvaluationFunction(key))
+                {
+                    this.Remove(key);
+                }
+            }
         }
 
         /// <summary>
@@ -27,20 +35,12 @@ namespace MemoryCacheHelper
         }
 
         /// <summary>
-        /// Remove all items from cache for which the lambda returns true
+        /// The core method that direcly removes an item from the wrapped memory cache
         /// </summary>
-        /// <param name="keyEvaluationFunction">function to test a string cache key, and return true if it should be removed from cache</param>
-        public void Remove(Func<string, bool> keyEvaluationFunction)
+        /// <param name="key">key of cache item to remove</param>
+        void IMemoryCacheDirect.Remove(string key)
         {
-            if (this._isWiping) { return; }
-
-            foreach (string key in this._memoryCache.Select(x => x.Key))
-            {
-                if (keyEvaluationFunction(key))
-                {
-                    this.Remove(key);
-                }
-            }
+            this._memoryCache.Remove(key);
         }
     }
 }

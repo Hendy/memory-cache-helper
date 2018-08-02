@@ -11,7 +11,7 @@ A singleton wrapper around an System.Runtime.Caching.MemoryCache instance, provi
 			
 			public string Name { get; } // unique name of wrapped memory cache
 
-			TODO: public CacheItemPolicy DefaultCacheItemPolicy { set; }
+			public CacheItemPolicy DefaultCacheItemPolicy { set; } // set an optional default
 
 			public void Set(string key, object value, CacheItemPolicy policy = null) { }
 
@@ -25,10 +25,12 @@ A singleton wrapper around an System.Runtime.Caching.MemoryCache instance, provi
 
 			public bool HasKey(string key) { }
 
-			TODO: public IEnumerable<string> GetKeys() { }
+			public IEnumerable<string> GetKeys() { }
 
 			public bool IsEmpty() { }
 
-			public long Trim(int percent)
+			public long Trim(int percent) { }
+
+			public void Wipe() { }
 		}
 	}

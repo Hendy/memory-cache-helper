@@ -6,10 +6,10 @@ namespace MemoryCacheHelper
     public sealed partial class MemoryCache
     {
         /// <summary>
-        /// Gets all keys
+        /// Iterate though all keys 
         /// </summary>
         /// <returns></returns>
-        internal IEnumerable<string> GetKeys()
+        public IEnumerable<string> GetKeys()
         {
             return this._memoryCache.Select(x => x.Key);
         }

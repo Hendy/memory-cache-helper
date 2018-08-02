@@ -9,50 +9,9 @@ namespace MemoryCacheHelper
     public sealed partial class MemoryCache
     {
         /// <summary>
-        /// locker object
+        /// Locker object
         /// </summary>
         private object _setLock = new object();
-
-        /// <summary>
-        /// The core method that directly sets a value in the wrapped memory cache
-        /// </summary>
-        /// <param name="key">key of cache item to set</param>
-        /// <param name="value">value to set</param>
-        /// <param name="policy">optoinal eviction policy</param>
-        void IMemoryCacheDirect.Set(string key, object value, CacheItemPolicy policy)
-        {
-            // the actual set operation
-            var set = new Action(() => {
-
-                this._isSetting = true;
-
-                if (policy != null)
-                {
-                    this._memoryCache.Set(key, value, policy);
-                }
-                else
-                {
-                    this._memoryCache[key] = value;
-                }
-
-                this._isSetting = false;
-
-            });
-
-            if (!this._isWiping)
-            {
-                set();
-            }
-            else // hold the set until wiping is complete
-            {
-                lock (this._setLock)
-                {
-                    SpinWait.SpinUntil(() => !this._isWiping); // keep one thread watching until wipe complete
-
-                    set();
-                }
-            }
-        }
 
         /// <summary>
         /// Inserts a cache entry into the cache by using a key and a value and optional eviction
@@ -95,5 +54,47 @@ namespace MemoryCacheHelper
         //{
 
         //}
+
+        /// <summary>
+        /// The core method that directly sets a value in the wrapped memory cache
+        /// </summary>
+        /// <param name="key">key of cache item to set</param>
+        /// <param name="value">value to set</param>
+        /// <param name="policy">optoinal eviction policy</param>
+        void IMemoryCacheDirect.Set(string key, object value, CacheItemPolicy policy)
+        {
+            var set = new Action(() => {
+
+                this._isSetting = true;
+
+                policy = policy ?? this.DefaultCacheItemPolicy;
+
+                if (policy != null)
+                {
+                    this._memoryCache.Set(key, value, policy);
+                }
+                else
+                {
+                    this._memoryCache[key] = value;
+                }
+
+                this._isSetting = false;
+
+            });
+
+            if (!this._isWiping)
+            {
+                set();
+            }
+            else // hold the set until wiping is complete
+            {
+                lock (this._setLock)
+                {
+                    SpinWait.SpinUntil(() => !this._isWiping); // one thread watching until wipe complete
+
+                    set();
+                }
+            }
+        }
     }
 }

@@ -4,37 +4,28 @@ using System.Threading;
 namespace MemoryCacheHelper.Models
 {
     /// <summary>
-    /// Respresents the setting state of a single cache item
+    /// Respresents the setting state of a cache item whilst a write operation is being attempted on it
     /// </summary>
     internal class CacheKeyBeingHandled
     {
         /// <summary>
-        /// Property exposes object to be used as a thread lock
+        /// Locker for this cache key - only one thread should be attempting to set a specific cache item at any one time
         /// </summary>
         internal object Lock { get; set; } = new object();
 
         /// <summary>
-        /// Handle to thread running consumer function
+        /// A thread running a function to set a cache item
         /// </summary>
         internal Thread Thread { get; set; }
 
         /// <summary>
-        /// The return type of the value function
+        /// The return type of the function
         /// </summary>
         internal Type Type { get; set; }
 
         /// <summary>
-        /// The directly set value (beating any function evaluation)
+        /// A directly set value (beating any function evaluation)
         /// </summary>
         internal object Value { get; set; }
-
-        ///// <summary>
-        ///// Constructor
-        ///// </summary>
-        ///// <param name="type"></param>
-        //internal CacheKeyBeingHandled(Type type)
-        //{
-        //    this.Type = type;
-        //}
     }
 }
