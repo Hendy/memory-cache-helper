@@ -41,7 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MemoryCache_Add.cs" />
     <Compile Include="MemoryCache_GetKeys.cs" />
+    <Compile Include="MemoryCache_Contains.cs" />
     <Compile Include="MemoryCache_Trim.cs" />
     <Compile Include="Models\CacheKeyBeingHandled.cs" />
     <Compile Include="Interfaces\IMemoryCacheDirect.cs" />

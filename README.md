@@ -21,15 +21,23 @@ A singleton wrapper around an System.Runtime.Caching.MemoryCache instance, provi
 
 			public T Get<T>(string key, bool found) { }
 
+			public object Get(string key) { } // wrapper
+
+			pulbic void Add(string key, Func<T> valueFunction, CacheItemPolicy policy = null) { }
+
 			public T AddOrGetExisting<T>(string key, Func<T> valueFunction, CacheItemPolicy policy = null) { }
 
-			public bool HasKey(string key) { }
+			TODO: public T GetSet<T>(string key, Funct<T> valueFunction, CacheItemPolicy policy = null) { } // alias for AddOrGetExisting
+
+			public bool Contains(string key) { } // wrapper
+
+			public bool HasKey(string key) { } // alias for Contains
 
 			public IEnumerable<string> GetKeys() { }
 
 			public bool IsEmpty() { }
 
-			public long Trim(int percent) { }
+			public long Trim(int percent) { } // wrapper
 
 			public void Wipe() { }
 		}

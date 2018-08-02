@@ -33,5 +33,15 @@
             found = false;
             return default(T);
         }
+
+        /// <summary>
+        /// Wrapper
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public object Get(string key)
+        {
+            return this._memoryCache[key];
+        }
     }
 }
