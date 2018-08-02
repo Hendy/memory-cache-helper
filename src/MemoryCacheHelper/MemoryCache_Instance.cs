@@ -28,10 +28,5 @@ namespace MemoryCacheHelper
         /// Get the instance of this cache
         /// </summary>
         public static MemoryCache Instance => _lazy.Value;
-
-        /// <summary>
-        /// The unique name of this memory cache
-        /// </summary>
-        public string Name => this._memoryCache.Name;
     }
 }
