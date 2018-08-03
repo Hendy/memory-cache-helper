@@ -36,24 +36,14 @@ namespace MemoryCacheHelper.Tests
         [TestMethod]
         public void Populating_Wipe()
         {
-            var setSomeItems = new Action<int>((count) => {
-                for (int i = 0; i < count; i++)
-                {
-                    var key = Guid.NewGuid().ToString();
-                    var value = DateTime.Now;
-
-                    MemoryCache.Instance.Set(key, value);
-                }
-            });
-
             Assert.IsTrue(MemoryCache.Instance.IsEmpty());
 
-            setSomeItems(5000);
-
+            base.SetSomeItems(5000);
+            
             Assert.IsFalse(MemoryCache.Instance.IsEmpty());
             Assert.AreEqual(5000, MemoryCache.Instance.GetKeys().Count());
 
-            Parallel.Invoke(() => MemoryCache.Instance.Wipe(), () => setSomeItems(1000));
+            Parallel.Invoke(() => MemoryCache.Instance.Wipe(), () => base.SetSomeItems(1000));
 
             Assert.AreEqual(1000, MemoryCache.Instance.GetKeys().Count());
         }    

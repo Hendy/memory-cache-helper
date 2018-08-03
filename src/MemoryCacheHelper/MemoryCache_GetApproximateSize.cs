@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
-using WrappedMemoryCache = System.Runtime.Caching.MemoryCache;
+﻿using System.Reflection;
 
 namespace MemoryCacheHelper
 {
@@ -21,7 +14,7 @@ namespace MemoryCacheHelper
 
             try
             {
-                var statsField = typeof(WrappedMemoryCache).GetField("_stats", BindingFlags.NonPublic | BindingFlags.Instance);
+                var statsField = typeof(System.Runtime.Caching.MemoryCache).GetField("_stats", BindingFlags.NonPublic | BindingFlags.Instance);
                 var statsValue = statsField.GetValue(this._memoryCache);
 
                 var monitorField = statsValue.GetType().GetField("_cacheMemoryMonitor", BindingFlags.NonPublic | BindingFlags.Instance);

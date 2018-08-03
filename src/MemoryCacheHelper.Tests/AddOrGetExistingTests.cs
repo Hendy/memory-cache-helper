@@ -50,16 +50,5 @@ namespace MemoryCacheHelper.Tests
                 Assert.AreEqual("first", output);
             }
         }
-
-        /// <summary>
-        /// a call to AddOrGetExisting should never return empty - currenlty a wipe may cause this to happen
-        /// </summary>
-        [TestMethod]
-        public void Handle_Function_Timeouts()
-        {
-
-
-
-        }
     }
 }
