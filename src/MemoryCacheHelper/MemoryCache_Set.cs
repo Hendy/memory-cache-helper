@@ -9,11 +9,6 @@ namespace MemoryCacheHelper
     public sealed partial class MemoryCache
     {
         /// <summary>
-        /// Locker object
-        /// </summary>
-        private object _setLock = new object();
-
-        /// <summary>
         /// Inserts a cache entry into the cache by using a key and a function and optional eviction
         /// </summary>
         /// <param name="key">A unique identifier for the cache entry to insert</param>

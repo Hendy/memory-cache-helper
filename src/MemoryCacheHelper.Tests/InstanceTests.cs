@@ -29,8 +29,9 @@ namespace MemoryCacheHelper.Tests
             });
 
             thread1.Start();
-            thread1.Join();
             thread2.Start();
+
+            thread1.Join();
             thread2.Join();
 
             Assert.IsTrue(value);            

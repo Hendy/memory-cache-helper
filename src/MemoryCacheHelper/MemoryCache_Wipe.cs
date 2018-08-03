@@ -9,11 +9,6 @@ namespace MemoryCacheHelper
     public sealed partial class MemoryCache
     {
         /// <summary>
-        /// Locker object
-        /// </summary>
-        private object _wipeLock = new object();
-
-        /// <summary>
         /// Wipe will remove all items from cache, blocking any sets until the wipe is complete
         /// </summary>
         public void Wipe()

@@ -22,7 +22,7 @@ namespace MemoryCacheHelper.Tests
         /// <summary>
         /// Add a number of cache items, using random guid key, and datetime value
         /// </summary>
-        /// <param name="count"></param>
+        /// <param name="count">the number of items to set</param>
         protected void SetSomeItems(int count)
         {
             count = Math.Max(0, count);

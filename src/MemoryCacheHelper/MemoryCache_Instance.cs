@@ -10,11 +10,6 @@ namespace MemoryCacheHelper
     public sealed partial class MemoryCache
     {
         /// <summary>
-        /// Singleton instance of the <see cref="MemoryCache"/> class
-        /// </summary>
-        private static readonly Lazy<MemoryCache> _lazy = new Lazy<MemoryCache>(() => new MemoryCache());
-
-        /// <summary>
         /// Private constructor
         /// </summary>
         private MemoryCache()
