@@ -83,5 +83,18 @@ namespace MemoryCacheHelper
 
             return value;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="policy"></param>
+        /// <returns></returns>
+        public T GetSet<T>(string key, object value, CacheItemPolicy policy = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
