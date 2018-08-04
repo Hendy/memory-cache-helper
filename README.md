@@ -2,66 +2,71 @@
 
 A singleton wrapper around an System.Runtime.Caching.MemoryCache instance, providing thread-safe helper methods.
 
-	// The singleton instance
-	public static MemoryCache Instance { get; }
+```csharp
+// The singleton instance
+public static MemoryCache Instance { get; }
 
-	// Unique name of wrapped memory cache
-	public string Name { get; }
+// Unique name of wrapped memory cache
+public string Name { get; }
 
-	// Optional default cache item policy to use if one is not provided with each call
-	public CacheItemPolicy DefaultCacheItemPolicy { set; }
+// Optional default cache item policy to use if one is not provided with each call
+public CacheItemPolicy DefaultCacheItemPolicy { set; }
 
 
-	public void Add(string key, Func<object> valueFunction, CacheItemPolicy policy = null) {}
+public void Add(string key, Func<object> valueFunction, CacheItemPolicy policy = null) {}
 
-	public void Add(string, object value, CacheItemPolicy = null) {}
+public void Add(string, object value, CacheItemPolicy = null) {}
 
-	public T AddOrGetExisting<T>(string key, Func<T> valueFunction, CacheItemPolicy policy = null) {}
+public T AddOrGetExisting<T>(string key, Func<T> valueFunction, CacheItemPolicy policy = null) {}
 
-	public T AddOrGetExisting<T>(string key, object value, CacheItemPolicy policy = null) {}
+public T AddOrGetExisting<T>(string key, object value, CacheItemPolicy policy = null) {}
 
-	// Wrapper
-	public bool Contains(string key) {}
+// Wrapper
+public bool Contains(string key) {}
 
-	// Get the cache value as type T, else default(T)
-	public T Get<T>(string key) {}
+// Removed all cache keys, without blocking any set opertions 
+public void Flush() {}
 
-	// Found is true when the key exists and its value is of type T
-	public T Get<T>(string key, out bool found) {}
+// Get the cache value as type T, else default(T)
+public T Get<T>(string key) {}
 
-	// Wrapper
-	public object Get(string key) {}
+// Found is true when the key exists and its value is of type T
+public T Get<T>(string key, out bool found) {}
 
-	// Attempts to return the approximate size via reflection, otherwize returns -1 for unknown
-	internal long GetApproximateSize() {}
+// Wrapper
+public object Get(string key) {}
 
-	public IEnumerable<string> GetKeys() {}
+// Attempts to return the approximate size via reflection, otherwize returns -1 for unknown
+internal long GetApproximateSize() {}
 
-	// Attempt to get cache value of type T, otherwise set it by a function
-	public T GetSet<T>(string Key, Func<T> valueFunction, CacheItemPolicy = null) {}
+public IEnumerable<string> GetKeys() {}
 
-	// Attempt to get cache value of type T, otherwise set it
-	public T GetSet<T>(seting key, object value, CacheItemPolicy = null) {}
+// Attempt to get cache value of type T, otherwise set it by a function
+public T GetSet<T>(string Key, Func<T> valueFunction, CacheItemPolicy = null) {}
 
-	public bool HasKey(string key) {}
+// Attempt to get cache value of type T, otherwise set it
+public T GetSet<T>(seting key, object value, CacheItemPolicy = null) {}
 
-	public bool IsEmpty() {}
+public bool HasKey(string key) {}
 
-	internal bool IsSetting() {}
+public bool IsEmpty() {}
 
-	internal bool IsWiping() {}
+internal bool IsSetting() {}
 
-	// Remove cache entries where the function return true for the key
-	public void Remove(Func<string, bool> keyFunction) {}
+internal bool IsWiping() {}
 
-	public void Remove(string key) {}
+// Remove cache entries where the function return true for the key
+public void Remove(Func<string, bool> keyFunction) {}
 
-	public void Set(string key, Func<object> valueFunction, CacheItemPolicy policy = null) {}
+public void Remove(string key) {}
 
-	public void Set(string key, object value, CacheItemPolicy policy = null) {}
+public void Set(string key, Func<object> valueFunction, CacheItemPolicy policy = null) {}
 
-	// Wrapper - Removes a specified percentage of cache entries from the cache
-	public long Trim(int percent) {}
+public void Set(string key, object value, CacheItemPolicy policy = null) {}
 
-	// Remove all cache entries, blocking any set operations until the wipe is complete
-	public void Wipe() {}
+// Wrapper - Removes a specified percentage of cache entries from the cache
+public long Trim(int percent) {}
+
+// Remove all cache entries, blocking any set operations until the wipe is complete
+public void Wipe() {}
+```

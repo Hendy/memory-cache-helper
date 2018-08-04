@@ -8,7 +8,7 @@ namespace MemoryCacheHelper.Interfaces
     internal interface IMemoryCacheDirect
     {
         /// <summary>
-        /// This set method sets to the wrapped memory cache directly
+        /// This sets to the wrapped memory cache directly
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -16,7 +16,7 @@ namespace MemoryCacheHelper.Interfaces
         void Set(string key, object value, CacheItemPolicy policy);
 
         /// <summary>
-        /// This method removes from the wrapped memory cache directly
+        /// This removes from the wrapped memory cache directly
         /// </summary>
         /// <param name="key"></param>
         void Remove(string key);

@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MemoryCache_Add.cs" />
+    <Compile Include="MemoryCache_Flush.cs" />
     <Compile Include="MemoryCache_GetApproximateSize.cs" />
     <Compile Include="MemoryCache_GetKeys.cs" />
     <Compile Include="MemoryCache_Contains.cs" />
