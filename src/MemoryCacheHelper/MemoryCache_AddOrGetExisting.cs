@@ -15,7 +15,12 @@ namespace MemoryCacheHelper
         /// <returns>An object of type T, or default T</returns>
         public T AddOrGetExisting<T>(string key, Func<T> valueFunction, CacheItemPolicy policy = null)
         {
-            return this.GetSet(key, valueFunction, policy);
+            if (!this.HasKey(key))
+            {
+                return this.GetSet(key, valueFunction, policy);
+            }
+
+            return this.Get<T>(key);
         }
     }
 }

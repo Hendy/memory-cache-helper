@@ -22,9 +22,7 @@ namespace MemoryCacheHelper
 
             lock (this._cacheKeysBeingHandled[key].Lock)
             {
-                object value = null;
-
-                value = valueFunction();
+                object value = valueFunction();
 
                 this.Set(key, value, policy);
             }
