@@ -92,9 +92,19 @@ namespace MemoryCacheHelper
         /// <param name="value"></param>
         /// <param name="policy"></param>
         /// <returns></returns>
-        public T GetSet<T>(string key, object value, CacheItemPolicy policy = null)
+        public T GetSet<T>(string key, T value, CacheItemPolicy policy = null)
         {
-            throw new NotImplementedException();
+            bool found;
+            var cachedValue = this.Get<T>(key, out found);
+
+            if (!found)
+            {
+                this.Set(key, value, policy);
+
+                return value;
+            }
+
+            return cachedValue;
         }
     }
 }

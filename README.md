@@ -14,31 +14,34 @@ A singleton wrapper around an System.Runtime.Caching.MemoryCache instance, provi
 
 	public void Add(string key, Func<object> valueFunction, CacheItemPolicy policy = null) {}
 
-	TODO: public void Add(string, object value, CacheItemPolicy = null) {}
+	public void Add(string, object value, CacheItemPolicy = null) {}
 
-	// Alias to GetSet<T>(key, valueFunction, policy)
 	public T AddOrGetExisting<T>(string key, Func<T> valueFunction, CacheItemPolicy policy = null) {}
 
-	TODO: public T AddOrGetExisting<T>(string key, object value, CacheItemPolicy policy = null) {}
+	public T AddOrGetExisting<T>(string key, object value, CacheItemPolicy policy = null) {}
 
 	// Wrapper
 	public bool Contains(string key) {}
 
+	// Get the cache value as type T, else default(T)
 	public T Get<T>(string key) {}
 
+	// Found is true when the key exists and its value is of type T
 	public T Get<T>(string key, out bool found) {}
 
 	// Wrapper
 	public object Get(string key) {}
 
-	// Attempts to return the approximate size, otherwize returns -1 for unknown
+	// Attempts to return the approximate size via reflection, otherwize returns -1 for unknown
 	internal long GetApproximateSize() {}
 
 	public IEnumerable<string> GetKeys() {}
 
+	// Attempt to get cache value of type T, otherwise set it by a function
 	public T GetSet<T>(string Key, Func<T> valueFunction, CacheItemPolicy = null) {}
 
-	TODO: public T GetSet<T>(seting key, object value, CacheItemPolicy = null) {}
+	// Attempt to get cache value of type T, otherwise set it
+	public T GetSet<T>(seting key, object value, CacheItemPolicy = null) {}
 
 	public bool HasKey(string key) {}
 
