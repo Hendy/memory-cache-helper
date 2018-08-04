@@ -15,7 +15,7 @@ namespace MemoryCacheHelper
         /// <param name="key">A unique identifier for the cache entry to insert</param>
         /// <param name="valueFunction">A function to execute to get the value for the cache entry</param>
         /// <param name="policy">(Optional) An object that contains eviction details for the cache entry</param>
-        /// <returns></returns>
+        /// <returns>An object of type T, or default T</returns>
         public T GetSet<T>(string key, Func<T> valueFunction, CacheItemPolicy policy = null)
         {
             bool found;
@@ -31,10 +31,12 @@ namespace MemoryCacheHelper
                     value = this.Get<T>(key, out found);
                     if (!found)
                     {
+                        // set, so function can be cancelled if a direct set of the same type occurs
                         this._cacheKeysBeingHandled[key].Type = typeof(T);
 
                         // put the function into it's own thread (so it can be cancelled)
-                        this._cacheKeysBeingHandled[key].Thread = new Thread(() => {
+                        this._cacheKeysBeingHandled[key].Thread = new Thread(() =>
+                        {
 
                             var aborted = false;
                             var success = false;

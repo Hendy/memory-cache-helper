@@ -39,7 +39,7 @@ namespace MemoryCacheHelper
         private bool _isWiping = false;
 
         /// <summary>
-        /// Locker object
+        /// Locker object, used to lock set operations when a wipe is in progress
         /// </summary>
         private object _setLock = new object();
 

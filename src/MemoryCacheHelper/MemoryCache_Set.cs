@@ -12,7 +12,7 @@ namespace MemoryCacheHelper
         /// Inserts a cache entry into the cache by using a key and a function and optional eviction
         /// </summary>
         /// <param name="key">A unique identifier for the cache entry to insert</param>
-        /// <param name="valueFunction">A function to execute to get the value for the cache entry</param>
+        /// <param name="valueFunction">A function to execute to get the data for the cache entry</param>
         /// <param name="policy">(Optional) An object that contains eviction details for the cache entry</param>
         public void Set(string key, Func<object> valueFunction, CacheItemPolicy policy = null)
         {
@@ -35,7 +35,7 @@ namespace MemoryCacheHelper
         /// </summary>
         /// <param name="key">A unique identifier for the cache entry to insert</param>
         /// <param name="value">The data for the cache entry</param>
-        /// <param name="policy">(Optional) An object that contains eviction details for the cache entry</param>
+        /// <param name="policy">(Optional) An object that contains eviction details for the cache item</param>
         public void Set(string key, object value, CacheItemPolicy policy = null)
         {
             if (key == null) { return; }
@@ -67,8 +67,8 @@ namespace MemoryCacheHelper
         /// The core method that directly sets a value in the wrapped memory cache
         /// </summary>
         /// <param name="key">key of cache item to set</param>
-        /// <param name="value">value to set</param>
-        /// <param name="policy">optoinal eviction policy</param>
+        /// <param name="value">The data for the cache entry</param>
+        /// <param name="policy">(Optional) An object that contains eviction details for the cache entry</param>
         void IMemoryCacheDirect.Set(string key, object value, CacheItemPolicy policy)
         {
             var set = new Action(() => {
