@@ -14,7 +14,11 @@ namespace MemoryCacheHelper
         /// <param name="policy">(Optional) An object that contains eviction details for the cache entry</param>
         public void Add(string key, Func<object> valueFunction, CacheItemPolicy policy = null)
         {
-            this.GetSet(key, valueFunction, policy);
+            // direct key check here, as the Set check for existance expects the value to be of given type
+            if (!this.HasKey(key))
+            {
+                this.Set(key, valueFunction, policy);
+            }
         }
 
         /// <summary>
@@ -25,9 +29,10 @@ namespace MemoryCacheHelper
         /// <param name="policy">(Optional) An object that contains eviction details for the cache entry</param>
         public void Add(string key, object value, CacheItemPolicy policy = null)
         {
-            throw new NotImplementedException();
-
-            this.GetSet<object>(key, value, policy);
+            if (!this.HasKey(key))
+            {
+                this.Set(key, value, policy);
+            }
         }
     }
 }
