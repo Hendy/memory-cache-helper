@@ -6,7 +6,7 @@
         /// Returns the current state
         /// </summary>
         /// <returns></returns>
-        internal bool IsWiping()
+        public bool IsWiping()
         {
             return this._isWiping;
         }
