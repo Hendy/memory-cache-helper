@@ -4,7 +4,7 @@ using System.Threading;
 namespace MemoryCacheHelper.Models
 {
     /// <summary>
-    /// Respresents the setting state of a cache item whilst a write operation is being attempted on it
+    /// Respresents the setting state of a cache item whilst a write operation is being attempted on it via a consumer supplied function
     /// </summary>
     internal class CacheKeyBeingHandled
     {

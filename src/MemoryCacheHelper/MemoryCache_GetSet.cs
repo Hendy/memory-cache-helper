@@ -84,13 +84,13 @@ namespace MemoryCacheHelper
         }
 
         /// <summary>
-        /// 
+        /// Gets or inserts a cache entry into the cache by using a key and a value and optional eviction
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <param name="policy"></param>
-        /// <returns></returns>
+        /// <param name="key">A unique identifier for the cache entry to insert</param>
+        /// <param name="value">The data for the cache entry</param>
+        /// <param name="policy">(Optional) An object that contains eviction details for the cache item</param>
+        /// <returns>An object of type T, or default T</returns>
         public T GetSet<T>(string key, T value, CacheItemPolicy policy = null)
         {
             bool found;
