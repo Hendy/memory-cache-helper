@@ -5,9 +5,9 @@ namespace MemoryCacheHelper
     public sealed partial class MemoryCache
     {
         /// <summary>
-        /// See if there are any cache items
+        /// Check to see if the memory cache is empty
         /// </summary>
-        /// <returns>true if the local cache is empty</returns>
+        /// <returns>Returns true if there are no cache keys</returns>
         public bool IsEmpty()
         {
             return !this._memoryCache.Any();

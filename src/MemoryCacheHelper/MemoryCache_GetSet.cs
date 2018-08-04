@@ -37,7 +37,6 @@ namespace MemoryCacheHelper
                         // put the function into it's own thread (so it can be cancelled)
                         this._cacheKeysBeingHandled[key].Thread = new Thread(() =>
                         {
-
                             var aborted = false;
                             var success = false;
 
