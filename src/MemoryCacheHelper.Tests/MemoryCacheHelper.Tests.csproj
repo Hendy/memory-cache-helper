@@ -58,6 +58,7 @@
     <Compile Include="InstanceTests.cs" />
     <Compile Include="GetTests.cs" />
     <Compile Include="SetTests.cs" />
+    <Compile Include="TestHelper.cs" />
     <Compile Include="TypeTests.cs" />
     <Compile Include="WipeTests.cs" />
   </ItemGroup>

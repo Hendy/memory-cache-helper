@@ -15,7 +15,7 @@ namespace MemoryCacheHelper.Tests
             
             if (SpinWait.SpinUntil(() => {
 
-                base.SetSomeItems(1);
+                TestHelper.SetSomeItems(1);
 
                 newSize = MemoryCache.Instance.GetApproximateSize();
 
