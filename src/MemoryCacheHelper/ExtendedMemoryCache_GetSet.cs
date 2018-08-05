@@ -25,17 +25,17 @@ namespace MemoryCacheHelper
             {
                 this._cacheKeysBeingHandled.TryAdd(key, new CacheKeyBeingHandled());
 
-                lock (this._cacheKeysBeingHandled[key].Lock)
+                lock (this._cacheKeysBeingHandled[key].GetSetLock)
                 {
                     // re-check to see if another thread beat us to setting this value
                     value = this.Get<T>(key, out found);
                     if (!found)
                     {
                         // set, so function can be cancelled if a direct set of the same type occurs
-                        this._cacheKeysBeingHandled[key].Type = typeof(T);
+                        this._cacheKeysBeingHandled[key].GetSetType = typeof(T);
 
                         // put the function into it's own thread (so it can be cancelled)
-                        this._cacheKeysBeingHandled[key].Thread = new Thread(() =>
+                        this._cacheKeysBeingHandled[key].GetSetThread = new Thread(() =>
                         {
                             var aborted = false;
                             var success = false;
@@ -72,8 +72,8 @@ namespace MemoryCacheHelper
                             }
                         });
 
-                        this._cacheKeysBeingHandled[key].Thread.Start();
-                        this._cacheKeysBeingHandled[key].Thread.Join();
+                        this._cacheKeysBeingHandled[key].GetSetThread.Start();
+                        this._cacheKeysBeingHandled[key].GetSetThread.Join();
                     }
                 }
 

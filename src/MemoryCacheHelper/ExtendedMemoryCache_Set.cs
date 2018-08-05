@@ -20,12 +20,38 @@ namespace MemoryCacheHelper
 
             this._cacheKeysBeingHandled.TryAdd(key, new CacheKeyBeingHandled());
 
-            lock (this._cacheKeysBeingHandled[key].Lock)
-            {
-                object value = valueFunction();
+            // abort any existing set function on this key
+            this._cacheKeysBeingHandled[key].SetThread?.Abort();
 
-                this.Set(key, value, policy);
+            lock (this._cacheKeysBeingHandled[key].SetLock)
+            {
+                // wait until any previous has fully aborted
+                SpinWait.SpinUntil(() =>
+                {
+                    var threadState = this._cacheKeysBeingHandled[key].SetThread?.ThreadState;
+
+                    return threadState == null
+                        || threadState.Value == ThreadState.Aborted
+                        || threadState.Value == ThreadState.Stopped;
+                });
+
+                this._cacheKeysBeingHandled[key].SetThread = new Thread(() =>
+                {
+                    try
+                    {
+                        object value = valueFunction();
+
+                        ((IMemoryCacheDirect)this).Set(key, value, policy);
+                    }
+                    catch (ThreadAbortException)
+                    {
+                    }
+                });
+
+                this._cacheKeysBeingHandled[key].SetThread.Start();
+                this._cacheKeysBeingHandled[key].SetThread.Join();
             }
+
         }
 
         /// <summary>
@@ -45,11 +71,13 @@ namespace MemoryCacheHelper
                 // if there's currently a function opterating on this key
                 if (this._cacheKeysBeingHandled.TryGetValue(key, out CacheKeyBeingHandled cacheKeyBeingHandled))
                 {
+                    cacheKeyBeingHandled.SetThread?.Abort();
+
                     // if it wants the same type, then cancel it and give it this value
-                    if (cacheKeyBeingHandled.Type == value.GetType())
+                    if (cacheKeyBeingHandled.GetSetType == value.GetType())
                     {
                         cacheKeyBeingHandled.Value = value;
-                        cacheKeyBeingHandled.Thread.Abort();
+                        cacheKeyBeingHandled.GetSetThread.Abort();
                     }
                 }
             }

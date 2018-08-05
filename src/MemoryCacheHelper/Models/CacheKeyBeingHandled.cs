@@ -9,19 +9,29 @@ namespace MemoryCacheHelper.Models
     internal class CacheKeyBeingHandled
     {
         /// <summary>
-        /// Locker for this cache key - only one thread should be attempting to set a specific cache item at any one time
+        /// Locker for this cache key GetSet function
         /// </summary>
-        internal object Lock { get; set; } = new object();
+        internal object GetSetLock { get; set; } = new object();
 
         /// <summary>
-        /// A thread running a function to set a cache item
+        /// A thread running a function to GetSet a cache item
         /// </summary>
-        internal Thread Thread { get; set; }
+        internal Thread GetSetThread { get; set; }
+
+        /// <summary>
+        /// Locker for this cache key Set function
+        /// </summary>
+        internal object SetLock { get; set; } = new object();
+
+        /// <summary>
+        /// A thread running a function to Set a cache item
+        /// </summary>
+        internal Thread SetThread { get; set; }
 
         /// <summary>
         /// The return type of the function
         /// </summary>
-        internal Type Type { get; set; }
+        internal Type GetSetType { get; set; }
 
         /// <summary>
         /// A directly set value (beating any function evaluation)

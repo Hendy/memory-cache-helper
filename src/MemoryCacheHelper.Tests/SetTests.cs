@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -68,6 +69,42 @@ namespace MemoryCacheHelper.Tests
                     Assert.AreEqual("cancel", output);
                 }
             }
+        }
+
+        [TestMethod]
+        public void Last_Set_Function_Should_Win()
+        {
+            var finished = false;
+
+            var slowSet = new Action<string>((x) =>
+            {
+                Task.Run(() =>
+                {
+                    ExtendedMemoryCache.Instance.Set("key", () =>
+                    {
+                        Thread.Sleep(100);
+                        return x;
+                    });
+
+                    if (x == "fifth")
+                    {
+                        finished = true;
+                    }
+                });
+            });
+
+            slowSet("first");
+            slowSet("second");
+            slowSet("third");
+            slowSet("fourth");
+            slowSet("fifth");
+
+            if (!SpinWait.SpinUntil(() => finished, 3000))
+            {
+                Assert.Inconclusive();
+            }
+
+            Assert.AreEqual("fifth", ExtendedMemoryCache.Instance.Get<string>("key"));
         }
     }
 }
