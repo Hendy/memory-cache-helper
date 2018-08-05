@@ -5,6 +5,5 @@ namespace MemoryCacheHelper.Tests
     [TestClass]
     public class AddTests
     {
-
     }
 }

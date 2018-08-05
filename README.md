@@ -1,6 +1,6 @@
 # MemoryCacheHelper
 
-A singleton wrapper around an System.Runtime.Caching.MemoryCache instance, providing thread-safe helper methods.
+A singleton wrapper around System.Runtime.Caching.MemoryCache, providing thread-safe helper methods.
 
 ```csharp
 // The singleton instance
@@ -27,7 +27,7 @@ public T AddOrGetExisting<T>(string key, object value, CacheItemPolicy policy = 
 // Wrapper
 public bool Contains(string key) {}
 
-// Removed all cache keys, without blocking any set opertions 
+// Remove all cache keys, but without blocking any set operations 
 public void Flush() {}
 
 // Get the cache value as type T, else default(T)

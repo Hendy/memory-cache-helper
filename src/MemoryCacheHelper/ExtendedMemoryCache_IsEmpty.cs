@@ -2,7 +2,7 @@
 
 namespace MemoryCacheHelper
 {
-    public sealed partial class MemoryCache
+    public sealed partial class ExtendedMemoryCache
     {
         /// <summary>
         /// Check to see if the memory cache is empty of keys

@@ -15,7 +15,7 @@ namespace MemoryCacheHelper.Tests
         [TestInitialize]
         public void Initialize()
         {
-            MemoryCache.Instance.Wipe();
+            ExtendedMemoryCache.Instance.Wipe();
         }
 
         [TestMethod]
@@ -23,7 +23,7 @@ namespace MemoryCacheHelper.Tests
         {
             var thread1 = new Thread(() => {
 
-                var instance = MemoryCache.Instance;
+                var instance = ExtendedMemoryCache.Instance;
 
                 instance.Set("key", true);
 
@@ -33,7 +33,7 @@ namespace MemoryCacheHelper.Tests
 
             var thread2 = new Thread(() => {
 
-                value = MemoryCache.Instance.Get<bool>("key");
+                value = ExtendedMemoryCache.Instance.Get<bool>("key");
 
             });
 
@@ -49,8 +49,8 @@ namespace MemoryCacheHelper.Tests
         [TestMethod]
         public void Ensure_Same_Instance_Between_Variables()
         {
-            var variable1 = MemoryCache.Instance;
-            var variable2 = MemoryCache.Instance;
+            var variable1 = ExtendedMemoryCache.Instance;
+            var variable2 = ExtendedMemoryCache.Instance;
 
             Assert.IsFalse(variable1.Get<bool>("key"));
             Assert.IsFalse(variable2.Get<bool>("key"));

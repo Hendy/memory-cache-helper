@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace MemoryCacheHelper
 {
-    public sealed partial class MemoryCache
+    public sealed partial class ExtendedMemoryCache
     {
         /// <summary>
         /// Set a cache item by key, function and optional eviction

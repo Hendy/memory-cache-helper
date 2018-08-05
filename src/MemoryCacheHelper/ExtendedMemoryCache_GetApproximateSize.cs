@@ -2,7 +2,7 @@
 
 namespace MemoryCacheHelper
 {
-    public sealed partial class MemoryCache
+    public sealed partial class ExtendedMemoryCache
     {
         /// <summary>
         /// https://stackoverflow.com/questions/22392634/how-to-measure-current-size-of-net-memory-cache-4-0

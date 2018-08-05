@@ -13,15 +13,15 @@ namespace MemoryCacheHelper.Tests
         [TestInitialize]
         public void Initialize()
         {
-            MemoryCache.Instance.Wipe();
+            ExtendedMemoryCache.Instance.Wipe();
         }
 
         [TestMethod]
         public void Empty_Wipe()
         {
-            MemoryCache.Instance.Wipe();
+            ExtendedMemoryCache.Instance.Wipe();
 
-            Assert.IsTrue(MemoryCache.Instance.IsEmpty());
+            Assert.IsTrue(ExtendedMemoryCache.Instance.IsEmpty());
         }
 
         [TestMethod]
@@ -29,11 +29,11 @@ namespace MemoryCacheHelper.Tests
         {
             TestHelper.Populate(1000);
 
-            Assert.IsFalse(MemoryCache.Instance.IsEmpty());
+            Assert.IsFalse(ExtendedMemoryCache.Instance.IsEmpty());
 
-            MemoryCache.Instance.Wipe();
+            ExtendedMemoryCache.Instance.Wipe();
 
-            Assert.IsTrue(MemoryCache.Instance.IsEmpty());
+            Assert.IsTrue(ExtendedMemoryCache.Instance.IsEmpty());
         }
 
         /// <summary>
@@ -44,18 +44,18 @@ namespace MemoryCacheHelper.Tests
         [TestMethod]
         public void Populating_Wipe()
         {
-            Assert.IsTrue(MemoryCache.Instance.IsEmpty());
+            Assert.IsTrue(ExtendedMemoryCache.Instance.IsEmpty());
 
             TestHelper.Populate(5000);
 
-            Assert.IsFalse(MemoryCache.Instance.IsEmpty());
-            Assert.AreEqual(5000, MemoryCache.Instance.GetKeys().Count());
+            Assert.IsFalse(ExtendedMemoryCache.Instance.IsEmpty());
+            Assert.AreEqual(5000, ExtendedMemoryCache.Instance.GetKeys().Count());
 
             Parallel.Invoke(
-                () => MemoryCache.Instance.Wipe(), 
+                () => ExtendedMemoryCache.Instance.Wipe(), 
                 () => TestHelper.Populate(1000));
 
-            Assert.AreEqual(1000, MemoryCache.Instance.GetKeys().Count());
+            Assert.AreEqual(1000, ExtendedMemoryCache.Instance.GetKeys().Count());
         }
     }
 }

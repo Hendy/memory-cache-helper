@@ -11,15 +11,15 @@ namespace MemoryCacheHelper.Tests
         [TestInitialize]
         public void Initialize()
         {
-            MemoryCache.Instance.Wipe();
+            ExtendedMemoryCache.Instance.Wipe();
         }
 
         [TestMethod]
         public void Set_Null_Expect_HasKey_False()
         {
-            MemoryCache.Instance.Set("key", null);
+            ExtendedMemoryCache.Instance.Set("key", null);
 
-            Assert.IsFalse(MemoryCache.Instance.HasKey("key"));
+            Assert.IsFalse(ExtendedMemoryCache.Instance.HasKey("key"));
         }
 
         [TestMethod]
@@ -27,9 +27,9 @@ namespace MemoryCacheHelper.Tests
         {
             var value = true;
 
-            MemoryCache.Instance.Set("key", value);
+            ExtendedMemoryCache.Instance.Set("key", value);
 
-            Assert.IsTrue(MemoryCache.Instance.HasKey("key"));
+            Assert.IsTrue(ExtendedMemoryCache.Instance.HasKey("key"));
         }
     }
 }

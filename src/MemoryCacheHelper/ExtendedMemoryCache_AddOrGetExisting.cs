@@ -3,7 +3,7 @@ using System.Runtime.Caching;
 
 namespace MemoryCacheHelper
 {
-    public sealed partial class MemoryCache
+    public sealed partial class ExtendedMemoryCache
     {
         /// <summary>
         /// If key not found, sets a new cache item by key, function and optional eviction

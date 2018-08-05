@@ -41,27 +41,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MemoryCache_Add.cs" />
-    <Compile Include="MemoryCache_Flush.cs" />
-    <Compile Include="MemoryCache_GetApproximateSize.cs" />
-    <Compile Include="MemoryCache_GetKeys.cs" />
-    <Compile Include="MemoryCache_Contains.cs" />
-    <Compile Include="MemoryCache_GetSet.cs" />
-    <Compile Include="MemoryCache_IsSetting.cs" />
-    <Compile Include="MemoryCache_IsWiping.cs" />
-    <Compile Include="MemoryCache_Name.cs" />
-    <Compile Include="MemoryCache_Trim.cs" />
+    <Compile Include="ExtendedMemoryCache_Add.cs" />
+    <Compile Include="ExtendedMemoryCache_Flush.cs" />
+    <Compile Include="ExtendedMemoryCache_GetApproximateSize.cs" />
+    <Compile Include="ExtendedMemoryCache_GetKeys.cs" />
+    <Compile Include="ExtendedMemoryCache_Contains.cs" />
+    <Compile Include="ExtendedMemoryCache_GetSet.cs" />
+    <Compile Include="ExtendedMemoryCache_IsSetting.cs" />
+    <Compile Include="ExtendedMemoryCache_IsWiping.cs" />
+    <Compile Include="ExtendedMemoryCache_Name.cs" />
+    <Compile Include="ExtendedMemoryCache_Trim.cs" />
     <Compile Include="Models\CacheKeyBeingHandled.cs" />
     <Compile Include="Interfaces\IMemoryCacheDirect.cs" />
-    <Compile Include="MemoryCache.cs" />
-    <Compile Include="MemoryCache_AddOrGetExisting.cs" />
-    <Compile Include="MemoryCache_Get.cs" />
-    <Compile Include="MemoryCache_HasKey.cs" />
-    <Compile Include="MemoryCache_Instance.cs" />
-    <Compile Include="MemoryCache_IsEmpty.cs" />
-    <Compile Include="MemoryCache_Remove.cs" />
-    <Compile Include="MemoryCache_Set.cs" />
-    <Compile Include="MemoryCache_Wipe.cs" />
+    <Compile Include="ExtendedMemoryCache.cs" />
+    <Compile Include="ExtendedMemoryCache_AddOrGetExisting.cs" />
+    <Compile Include="ExtendedMemoryCache_Get.cs" />
+    <Compile Include="ExtendedMemoryCache_HasKey.cs" />
+    <Compile Include="ExtendedMemoryCache_Instance.cs" />
+    <Compile Include="ExtendedMemoryCache_IsEmpty.cs" />
+    <Compile Include="ExtendedMemoryCache_Remove.cs" />
+    <Compile Include="ExtendedMemoryCache_Set.cs" />
+    <Compile Include="ExtendedMemoryCache_Wipe.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

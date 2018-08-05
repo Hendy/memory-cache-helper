@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace MemoryCacheHelper
 {
-    public sealed partial class MemoryCache
+    public sealed partial class ExtendedMemoryCache
     {
         /// <summary>
         /// Iterate though all keys 

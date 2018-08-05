@@ -11,13 +11,13 @@ namespace MemoryCacheHelper.Tests
         [TestInitialize]
         public void Initialize()
         {
-            MemoryCache.Instance.Wipe();
+            ExtendedMemoryCache.Instance.Wipe();
         }
 
         [TestMethod]
         public void Remove_Unknown_Key()
         {
-            MemoryCache.Instance.Remove("key");
+            ExtendedMemoryCache.Instance.Remove("key");
         }
 
         [TestMethod]
@@ -27,14 +27,14 @@ namespace MemoryCacheHelper.Tests
             {
                 var uniqueKey = "key" + i.ToString();
 
-                MemoryCache.Instance.Set(uniqueKey, true);
+                ExtendedMemoryCache.Instance.Set(uniqueKey, true);
             }
 
-            Assert.IsFalse(MemoryCache.Instance.IsEmpty());
+            Assert.IsFalse(ExtendedMemoryCache.Instance.IsEmpty());
 
-            MemoryCache.Instance.Remove(x => x.StartsWith("key"));
+            ExtendedMemoryCache.Instance.Remove(x => x.StartsWith("key"));
 
-            Assert.IsTrue(MemoryCache.Instance.IsEmpty());
+            Assert.IsTrue(ExtendedMemoryCache.Instance.IsEmpty());
         }
     }
 }

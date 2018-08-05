@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MemoryCacheHelper
 {
-    public sealed partial class MemoryCache
+    public sealed partial class ExtendedMemoryCache
     {
         /// <summary>
         /// Remove all cache entries, blocking any set operations until complete

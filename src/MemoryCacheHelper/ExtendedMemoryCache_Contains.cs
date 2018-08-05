@@ -1,6 +1,6 @@
 ﻿namespace MemoryCacheHelper
 {
-    public sealed partial class MemoryCache
+    public sealed partial class ExtendedMemoryCache
     {
         /// <summary>
         /// Determines whether a cache entry exists in the cache

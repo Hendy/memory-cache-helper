@@ -13,7 +13,7 @@ namespace MemoryCacheHelper.Tests
         [TestInitialize]
         public void Initialize()
         {
-            MemoryCache.Instance.Wipe();
+            ExtendedMemoryCache.Instance.Wipe();
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace MemoryCacheHelper.Tests
 
             Task.Run(() =>
             {
-                output = MemoryCache.Instance.AddOrGetExisting("key", () =>
+                output = ExtendedMemoryCache.Instance.AddOrGetExisting("key", () =>
                 {
                     started = true;
 
@@ -50,13 +50,13 @@ namespace MemoryCacheHelper.Tests
                 Assert.IsTrue(started);
 
                 // there shouldn't be an item, as the infinite loop prevents the set
-                Assert.IsFalse(MemoryCache.Instance.HasKey("key"));
+                Assert.IsFalse(ExtendedMemoryCache.Instance.HasKey("key"));
 
                 // immediately set the cache item, cancelling the infinite loop
-                MemoryCache.Instance.Set("key", "cancel");
+                ExtendedMemoryCache.Instance.Set("key", "cancel");
 
-                Assert.IsTrue(MemoryCache.Instance.HasKey("key"));
-                Assert.AreEqual("cancel", MemoryCache.Instance.Get<string>("key"));
+                Assert.IsTrue(ExtendedMemoryCache.Instance.HasKey("key"));
+                Assert.AreEqual("cancel", ExtendedMemoryCache.Instance.Get<string>("key"));
 
                 // wait for the cancelled task to finish
                 if (!SpinWait.SpinUntil(() => finished, 100))

@@ -1,6 +1,6 @@
 ﻿namespace MemoryCacheHelper
 {
-    public sealed partial class MemoryCache
+    public sealed partial class ExtendedMemoryCache
     {
         /// <summary>
         /// See if the cache contains a specific cache key

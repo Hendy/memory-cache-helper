@@ -12,7 +12,7 @@ namespace MemoryCacheHelper.Tests
         [TestInitialize]
         public void Initialize()
         {
-            MemoryCache.Instance.Wipe();
+            ExtendedMemoryCache.Instance.Wipe();
         }
 
         [TestMethod]
@@ -20,8 +20,8 @@ namespace MemoryCacheHelper.Tests
         {
             bool input = true;
 
-            MemoryCache.Instance.Set("key", input);
-            Assert.AreEqual(true, MemoryCache.Instance.Get<bool>("key"));
+            ExtendedMemoryCache.Instance.Set("key", input);
+            Assert.AreEqual(true, ExtendedMemoryCache.Instance.Get<bool>("key"));
         }
 
         [TestMethod]
@@ -29,8 +29,8 @@ namespace MemoryCacheHelper.Tests
         {
             int input = 1;
 
-            MemoryCache.Instance.Set("key", input);
-            Assert.AreEqual(1, MemoryCache.Instance.Get<int>("key"));
+            ExtendedMemoryCache.Instance.Set("key", input);
+            Assert.AreEqual(1, ExtendedMemoryCache.Instance.Get<int>("key"));
         }
 
         [TestMethod]
@@ -38,8 +38,8 @@ namespace MemoryCacheHelper.Tests
         {
             DayOfWeek input = DayOfWeek.Friday;
 
-            MemoryCache.Instance.Set("key", input);
-            Assert.AreEqual(DayOfWeek.Friday, MemoryCache.Instance.Get<DayOfWeek>("key"));
+            ExtendedMemoryCache.Instance.Set("key", input);
+            Assert.AreEqual(DayOfWeek.Friday, ExtendedMemoryCache.Instance.Get<DayOfWeek>("key"));
         }
 
     }

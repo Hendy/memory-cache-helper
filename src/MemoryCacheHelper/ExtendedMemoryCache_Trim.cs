@@ -1,6 +1,6 @@
 ﻿namespace MemoryCacheHelper
 {
-    public sealed partial class MemoryCache
+    public sealed partial class ExtendedMemoryCache
     {
         /// <summary>
         /// Removes a specified percentage of cache entries from the cache object

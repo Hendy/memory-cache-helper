@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace MemoryCacheHelper
 {
-    public sealed partial class MemoryCache
+    public sealed partial class ExtendedMemoryCache
     {
         /// <summary>
         /// Remove items from cache where a supplied function returns true for any given key
