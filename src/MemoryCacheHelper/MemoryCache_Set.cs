@@ -9,7 +9,7 @@ namespace MemoryCacheHelper
     public sealed partial class MemoryCache
     {
         /// <summary>
-        /// Inserts a cache entry into the cache by using a key and a function and optional eviction
+        /// Set a cache item by key, function and optional eviction
         /// </summary>
         /// <param name="key">A unique identifier for the cache entry to insert</param>
         /// <param name="valueFunction">A function to execute to get the data for the cache entry</param>
@@ -29,7 +29,7 @@ namespace MemoryCacheHelper
         }
 
         /// <summary>
-        /// Inserts a cache entry into the cache by using a key and a value and optional eviction
+        /// Set a cache item by key, value and optional eviction
         /// </summary>
         /// <param name="key">A unique identifier for the cache entry to insert</param>
         /// <param name="value">The data for the cache entry</param>

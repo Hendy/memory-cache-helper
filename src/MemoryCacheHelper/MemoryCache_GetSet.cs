@@ -9,7 +9,7 @@ namespace MemoryCacheHelper
     public sealed partial class MemoryCache
     {
         /// <summary>
-        /// Gets or inserts a cache entry into the cache by using a key and a function and optional eviction
+        /// Attempts to get cache value of type T, otherwise sets a cache item by key, function and optional eviction
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="key">A unique identifier for the cache entry to insert</param>
@@ -84,7 +84,7 @@ namespace MemoryCacheHelper
         }
 
         /// <summary>
-        /// Gets or inserts a cache entry into the cache by using a key and a value and optional eviction
+        /// Attempts to get cache value of type T, otherwise sets a cache item by key, value and optional eviction
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="key">A unique identifier for the cache entry to insert</param>

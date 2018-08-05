@@ -9,7 +9,7 @@ namespace MemoryCacheHelper
     public sealed partial class MemoryCache
     {
         /// <summary>
-        /// Wipe will remove all cache entries, blocking any set operations until the wipe is complete
+        /// Remove all cache entries, blocking any set operations until complete
         /// </summary>
         public void Wipe()
         {
