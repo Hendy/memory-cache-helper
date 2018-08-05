@@ -20,7 +20,7 @@ namespace MemoryCacheHelper
 
             this._cacheKeysBeingHandled.TryAdd(key, new CacheKeyBeingHandled());
 
-            lock (this._cacheKeysBeingHandled[key].SetOperation.Lock)
+            lock (this._cacheKeysBeingHandled[key].SetOperation.CounterLock)
             {
                 this._cacheKeysBeingHandled[key].SetOperation.Counter ++;
             }
@@ -40,7 +40,7 @@ namespace MemoryCacheHelper
                 }
             }
 
-            lock (_cacheKeysBeingHandled[key].SetOperation.Lock)
+            lock (_cacheKeysBeingHandled[key].SetOperation.CounterLock)
             {
                 if (this._cacheKeysBeingHandled[key].SetOperation.Counter > 1)
                 {

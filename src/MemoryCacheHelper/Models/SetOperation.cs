@@ -10,6 +10,11 @@ namespace MemoryCacheHelper.Models
         internal object Lock { get; } = new object();
 
         /// <summary>
+        /// Locker for increment / decrement of counter value
+        /// </summary>
+        internal object CounterLock { get; } = new object();
+
+        /// <summary>
         /// Used to count the number of threads being blocked whilst the last thread is being cancelled
         /// </summary>
         internal int Counter { get; set; }
