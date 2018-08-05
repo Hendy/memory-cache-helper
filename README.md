@@ -4,13 +4,13 @@ A singleton wrapper around System.Runtime.Caching.MemoryCache, providing thread-
 
 ```csharp
 // The singleton instance
-public static MemoryCache Instance { get; }
+public static ExtendedMemoryCache Instance { get; }
 
 // Unique name of wrapped memory cache
 public string Name { get; }
 
-// An optional default policy to use if one is not provided with each call
-public CacheItemPolicy DefaultCacheItemPolicy { set; }
+// Set an optional default policy to use if one is not provided with each call
+public CacheItemPolicy DefaultPolicy { set; }
 
 // If key not found, sets a cache item by key, function and optional eviction
 public void Add(string key, Func<object> valueFunction, CacheItemPolicy policy = null) {}

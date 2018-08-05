@@ -14,14 +14,14 @@ namespace MemoryCacheHelper
         private static readonly Lazy<ExtendedMemoryCache> _lazy = new Lazy<ExtendedMemoryCache>(() => new ExtendedMemoryCache());
 
         /// <summary>
-        /// Internal instance of the <see cref="System.Runtime.Caching.MemoryCache"/> class
+        /// The wrapped memory cache
         /// </summary>
-        private System.Runtime.Caching.MemoryCache _memoryCache;
+        private MemoryCache _memoryCache;
 
         /// <summary>
         /// Optional default cache item policy to use if one isn't provided in each call
         /// </summary>
-        public CacheItemPolicy DefaultCacheItemPolicy { get; set; } = null;
+        public CacheItemPolicy DefaultPolicy { get; set; } = null;
 
         /// <summary>
         /// Locker collection of all cache keys currently executing a function to set a cache item

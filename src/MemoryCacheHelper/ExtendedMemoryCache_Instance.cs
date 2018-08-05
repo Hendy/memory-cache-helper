@@ -5,7 +5,7 @@ using System.Collections.Concurrent;
 namespace MemoryCacheHelper
 {
     /// <summary>
-    /// Responsible for constructing the instance
+    /// 
     /// </summary>
     public sealed partial class ExtendedMemoryCache
     {

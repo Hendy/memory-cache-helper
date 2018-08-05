@@ -73,7 +73,7 @@ namespace MemoryCacheHelper
 
                 this._isSetting = true;
 
-                policy = policy ?? this.DefaultCacheItemPolicy;
+                policy = policy ?? this.DefaultPolicy;
 
                 try
                 {
