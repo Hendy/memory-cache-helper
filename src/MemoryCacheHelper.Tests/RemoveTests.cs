@@ -1,4 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MemoryCacheHelper.Tests
 {
@@ -18,27 +20,27 @@ namespace MemoryCacheHelper.Tests
         public void Remove_Unknown_Key()
         {
             ExtendedMemoryCache.Instance.Remove("key");
-
-            Assert.IsFalse(ExtendedMemoryCache.Instance.HasKey("key"));
         }
 
         [TestMethod]
         public void Remove_Null_Key()
         {
-            ExtendedMemoryCache.Instance.Remove((string)null);            
+            ExtendedMemoryCache.Instance.Remove((string)null);
         }
 
         [TestMethod]
-        public void Remove_By_Lambda()
+        public void Remove_Whitespace_Key()
         {
-            for(int i = 0; i < 10; i ++)
-            {
-                var uniqueKey = "key" + i.ToString();
+            ExtendedMemoryCache.Instance.Remove("");
+        }
 
-                ExtendedMemoryCache.Instance.Set(uniqueKey, true);
-            }
+        [TestMethod]
+        public void Remove_By_Function()
+        {
+            TestHelper.Populate(100, x => { return new KeyValuePair<string, object>("key" + x.ToString(), true); });
 
             Assert.IsFalse(ExtendedMemoryCache.Instance.IsEmpty());
+            Assert.AreEqual(100, ExtendedMemoryCache.Instance.GetKeys().Count());
 
             ExtendedMemoryCache.Instance.Remove(x => x.StartsWith("key"));
 

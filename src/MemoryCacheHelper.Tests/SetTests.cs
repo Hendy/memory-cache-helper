@@ -17,6 +17,14 @@ namespace MemoryCacheHelper.Tests
             ExtendedMemoryCache.Instance.Wipe();
         }
 
+        [TestMethod]
+        public void Set_Null_Key()
+        {
+            ExtendedMemoryCache.Instance.Set((string)null, true);
+
+            Assert.IsTrue(ExtendedMemoryCache.Instance.IsEmpty());
+        }
+
         /// <summary>
         /// A direct set should trigger any function working on this key should be cancelled
         /// </summary>
