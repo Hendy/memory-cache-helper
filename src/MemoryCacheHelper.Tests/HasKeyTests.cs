@@ -3,14 +3,25 @@
 namespace MemoryCacheHelper.Tests
 {
     [TestClass]
-    public class HasKeyTests : BaseTests
+    public class HasKeyTests
     {
+        /// <summary>
+        /// Every test should start with an empty cache
+        /// </summary>
+        [TestInitialize]
+        public void Initialize()
+        {
+            MemoryCache.Instance.Wipe();
+
+            Assert.IsTrue(MemoryCache.Instance.IsEmpty());
+        }
+
         [TestMethod]
         public void Set_Null_Expect_HasKey_False()
         {
-            MemoryCache.Instance.Set(KEY, null);
+            MemoryCache.Instance.Set("key", null);
 
-            Assert.IsFalse(MemoryCache.Instance.HasKey(KEY));
+            Assert.IsFalse(MemoryCache.Instance.HasKey("key"));
         }
 
         [TestMethod]
@@ -18,9 +29,9 @@ namespace MemoryCacheHelper.Tests
         {
             var value = true;
 
-            MemoryCache.Instance.Set(KEY, value);
+            MemoryCache.Instance.Set("key", value);
 
-            Assert.IsTrue(MemoryCache.Instance.HasKey(KEY));
+            Assert.IsTrue(MemoryCache.Instance.HasKey("key"));
         }
     }
 }

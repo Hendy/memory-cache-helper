@@ -7,8 +7,19 @@ namespace MemoryCacheHelper.Tests
     /// Testing the singleton
     /// </summary>
     [TestClass]
-    public class InstanceTests : BaseTests
+    public class InstanceTests
     {
+        /// <summary>
+        /// Every test should start with an empty cache
+        /// </summary>
+        [TestInitialize]
+        public void Initialize()
+        {
+            MemoryCache.Instance.Wipe();
+
+            Assert.IsTrue(MemoryCache.Instance.IsEmpty());
+        }
+
         [TestMethod]
         public void Ensure_Same_Instance_Between_Threads()
         {
@@ -16,7 +27,7 @@ namespace MemoryCacheHelper.Tests
 
                 var instance = MemoryCache.Instance;
 
-                instance.Set(KEY, true);
+                instance.Set("key", true);
 
             });
 
@@ -24,7 +35,7 @@ namespace MemoryCacheHelper.Tests
 
             var thread2 = new Thread(() => {
 
-                value = MemoryCache.Instance.Get<bool>(KEY);
+                value = MemoryCache.Instance.Get<bool>("key");
 
             });
 
@@ -43,13 +54,13 @@ namespace MemoryCacheHelper.Tests
             var variable1 = MemoryCache.Instance;
             var variable2 = MemoryCache.Instance;
 
-            Assert.IsFalse(variable1.Get<bool>(KEY));
-            Assert.IsFalse(variable2.Get<bool>(KEY));
+            Assert.IsFalse(variable1.Get<bool>("key"));
+            Assert.IsFalse(variable2.Get<bool>("key"));
 
-            variable1.Set(KEY, true);
+            variable1.Set("key", true);
 
-            Assert.IsTrue(variable1.Get<bool>(KEY));
-            Assert.IsTrue(variable2.Get<bool>(KEY));
+            Assert.IsTrue(variable1.Get<bool>("key"));
+            Assert.IsTrue(variable2.Get<bool>("key"));
         }
     }
 }

@@ -1,13 +1,23 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace MemoryCacheHelper.Tests
 {
     [TestClass]
-    public class WipeTests : BaseTests
+    public class WipeTests
     {
+        /// <summary>
+        /// Every test should start with an empty cache
+        /// </summary>
+        [TestInitialize]
+        public void Initialize()
+        {
+            MemoryCache.Instance.Wipe();
+
+            Assert.IsTrue(MemoryCache.Instance.IsEmpty());
+        }
+
         [TestMethod]
         public void Empty_Wipe()
         {
@@ -19,7 +29,7 @@ namespace MemoryCacheHelper.Tests
         [TestMethod]
         public void Populated_Wipe()
         {
-            MemoryCache.Instance.Set(KEY, true);
+            MemoryCache.Instance.Set("key", true);
 
             Assert.IsFalse(MemoryCache.Instance.IsEmpty());
 
@@ -38,16 +48,16 @@ namespace MemoryCacheHelper.Tests
         {
             Assert.IsTrue(MemoryCache.Instance.IsEmpty());
 
-            TestHelper.SetSomeItems(5000);
-            
+            TestHelper.Populate(5000);
+
             Assert.IsFalse(MemoryCache.Instance.IsEmpty());
             Assert.AreEqual(5000, MemoryCache.Instance.GetKeys().Count());
 
             Parallel.Invoke(
                 () => MemoryCache.Instance.Wipe(), 
-                () => TestHelper.SetSomeItems(1000));
+                () => TestHelper.Populate(1000));
 
             Assert.AreEqual(1000, MemoryCache.Instance.GetKeys().Count());
-        }    
+        }
     }
 }

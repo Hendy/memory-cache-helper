@@ -6,14 +6,25 @@ using System.Threading.Tasks;
 namespace MemoryCacheHelper.Tests
 {
     [TestClass]
-    public class AddOrGetExistingTests : BaseTests
+    public class AddOrGetExistingTests
     {
+        /// <summary>
+        /// Every test should start with an empty cache
+        /// </summary>
+        [TestInitialize]
+        public void Initialize()
+        {
+            MemoryCache.Instance.Wipe();
+
+            Assert.IsTrue(MemoryCache.Instance.IsEmpty());
+        }
+
         [TestMethod]
         public void AddOrGetExisting_String()
         {
             var input = "hello world";
 
-            var output = MemoryCache.Instance.AddOrGetExisting<string>(KEY, () => input);
+            var output = MemoryCache.Instance.AddOrGetExisting<string>("key", () => input);
 
             Assert.AreEqual(input, output);
         }
@@ -28,7 +39,7 @@ namespace MemoryCacheHelper.Tests
             var started = false;
 
             Task.Run(() => {
-                output = MemoryCache.Instance.AddOrGetExisting(KEY, () => {
+                output = MemoryCache.Instance.AddOrGetExisting("key", () => {
                     started = true;
                     Thread.Sleep(250);
                     return "first";
@@ -44,9 +55,9 @@ namespace MemoryCacheHelper.Tests
                 Assert.IsTrue(started);
 
                 // this should be blocked, so it's value should not be set
-                MemoryCache.Instance.AddOrGetExisting(KEY, () => "second");
+                MemoryCache.Instance.AddOrGetExisting("key", () => "second");
 
-                Assert.AreEqual("first", MemoryCache.Instance.Get<string>(KEY));
+                Assert.AreEqual("first", MemoryCache.Instance.Get<string>("key"));
                 Assert.AreEqual("first", output);
             }
         }

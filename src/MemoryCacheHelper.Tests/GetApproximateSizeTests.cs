@@ -5,8 +5,19 @@ using System.Threading;
 namespace MemoryCacheHelper.Tests
 {
     [TestClass]
-    public class GetApproximateSizeTests : BaseTests
+    public class GetApproximateSizeTests
     {
+        /// <summary>
+        /// Every test should start with an empty cache
+        /// </summary>
+        [TestInitialize]
+        public void Initialize()
+        {
+            MemoryCache.Instance.Wipe();
+
+            Assert.IsTrue(MemoryCache.Instance.IsEmpty());
+        }
+
         [TestMethod]
         public void Fill_And_See_GetApproxiateSize_Increase()
         {

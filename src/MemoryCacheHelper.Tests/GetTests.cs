@@ -3,14 +3,25 @@
 namespace MemoryCacheHelper.Tests
 {
     [TestClass]
-    public class GetTests : BaseTests
+    public class GetTests
     {
+        /// <summary>
+        /// Every test should start with an empty cache
+        /// </summary>
+        [TestInitialize]
+        public void Initialize()
+        {
+            MemoryCache.Instance.Wipe();
+
+            Assert.IsTrue(MemoryCache.Instance.IsEmpty());
+        }
+
         [TestMethod]
         public void Get_Unknown_Key()
         {
             var found = false;
 
-            var output = MemoryCache.Instance.Get<string>(KEY, out found);
+            var output = MemoryCache.Instance.Get<string>("key", out found);
 
             Assert.IsFalse(found);
 
@@ -22,9 +33,9 @@ namespace MemoryCacheHelper.Tests
         {
             var input = "hello world";
 
-            MemoryCache.Instance.Set(KEY, input);
+            MemoryCache.Instance.Set("key", input);
 
-            var output = MemoryCache.Instance.Get<string>(KEY);
+            var output = MemoryCache.Instance.Get<string>("key");
 
             Assert.AreEqual(input, output);
         }

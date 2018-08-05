@@ -1,24 +1,64 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace MemoryCacheHelper.Tests
 {
     internal static class TestHelper
     {
         /// <summary>
-        /// Add a number of cache items, using random guid key, and datetime value
+        /// Set the count number of items, where the key is guid + counter, and the value is the current datetime
         /// </summary>
-        /// <param name="count">the number of items to set</param>
-        internal static void SetSomeItems(int count)
+        /// <param name="count"></param>
+        internal static void Populate(int count)
         {
-            count = Math.Max(0, count);
+            TestHelper.Populate(count, (x) => {
+                return new KeyValuePair<string, object>(
+                    Guid.NewGuid().ToString() + "_" + x.ToString(), 
+                    DateTime.Now);
+            });
+        }
 
-            for (int i = 0; i < count; i++)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="count"></param>
+        /// <param name="func"></param>
+        internal static void Populate(int count, Func<int, KeyValuePair<string, object>> func)
+        {
+            for(var counter = 0; counter < count; counter ++)
             {
-                var key = Guid.NewGuid().ToString();
-                var value = DateTime.Now;
+                var item = func(counter);
 
-                MemoryCache.Instance.Set(key, value);
+                MemoryCache.Instance.Set(item.Key, item.Value);
             }
+        }
+
+        /// <summary>
+        /// Start a process to keep populating for the specified timespan duration.
+        /// Each set attempt calls the supplied function for the key and value it should set
+        /// </summary>
+        /// <param name="func">function called for each set iteration</param>
+        internal static void PopulateFor<T>(TimeSpan timeSpan, Func<int, KeyValuePair<string, object>> func)
+        {
+            Task.Run(() =>
+            {
+                var stopwatch = new Stopwatch();
+
+                stopwatch.Start();
+
+                int counter = 0;
+
+                while (stopwatch.Elapsed <= timeSpan)
+                {
+                    counter++;
+
+                    var item = func(counter);
+
+                    MemoryCache.Instance.Set(item.Key, item.Value);
+                }
+            });
         }
     }
 }

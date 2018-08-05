@@ -4,15 +4,26 @@ using System;
 namespace MemoryCacheHelper.Tests
 {
     [TestClass]
-    public class TypeTests : BaseTests
+    public class TypeTests
     {
+        /// <summary>
+        /// Every test should start with an empty cache
+        /// </summary>
+        [TestInitialize]
+        public void Initialize()
+        {
+            MemoryCache.Instance.Wipe();
+
+            Assert.IsTrue(MemoryCache.Instance.IsEmpty());
+        }
+
         [TestMethod]
         public void Boolean()
         {
             bool input = true;
 
-            MemoryCache.Instance.Set(KEY, input);
-            Assert.AreEqual(true, MemoryCache.Instance.Get<bool>(KEY));
+            MemoryCache.Instance.Set("key", input);
+            Assert.AreEqual(true, MemoryCache.Instance.Get<bool>("key"));
         }
 
         [TestMethod]
@@ -20,8 +31,8 @@ namespace MemoryCacheHelper.Tests
         {
             int input = 1;
 
-            MemoryCache.Instance.Set(KEY, input);
-            Assert.AreEqual(1, MemoryCache.Instance.Get<int>(KEY));
+            MemoryCache.Instance.Set("key", input);
+            Assert.AreEqual(1, MemoryCache.Instance.Get<int>("key"));
         }
 
         [TestMethod]
@@ -29,8 +40,8 @@ namespace MemoryCacheHelper.Tests
         {
             DayOfWeek input = DayOfWeek.Friday;
 
-            MemoryCache.Instance.Set(KEY, input);
-            Assert.AreEqual(DayOfWeek.Friday, MemoryCache.Instance.Get<DayOfWeek>(KEY));
+            MemoryCache.Instance.Set("key", input);
+            Assert.AreEqual(DayOfWeek.Friday, MemoryCache.Instance.Get<DayOfWeek>("key"));
         }
 
     }
