@@ -14,8 +14,6 @@ namespace MemoryCacheHelper.Tests
         public void Initialize()
         {
             MemoryCache.Instance.Wipe();
-
-            Assert.IsTrue(MemoryCache.Instance.IsEmpty());
         }
 
         [TestMethod]
@@ -29,7 +27,7 @@ namespace MemoryCacheHelper.Tests
         [TestMethod]
         public void Populated_Wipe()
         {
-            MemoryCache.Instance.Set("key", true);
+            TestHelper.Populate(1000);
 
             Assert.IsFalse(MemoryCache.Instance.IsEmpty());
 
