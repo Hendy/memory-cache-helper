@@ -25,17 +25,17 @@ namespace MemoryCacheHelper
             {
                 this._cacheKeysBeingHandled.TryAdd(key, new CacheKeyBeingHandled());
 
-                lock (this._cacheKeysBeingHandled[key].GetSetLock)
+                lock (this._cacheKeysBeingHandled[key].GetSetOperation.Lock)
                 {
                     // re-check to see if another thread beat us to setting this value
                     value = this.Get<T>(key, out found);
                     if (!found)
                     {
                         // set, so function can be cancelled if a direct set of the same type occurs
-                        this._cacheKeysBeingHandled[key].GetSetType = typeof(T);
+                        this._cacheKeysBeingHandled[key].GetSetOperation.Type = typeof(T);
 
                         // put the function into it's own thread (so it can be cancelled)
-                        this._cacheKeysBeingHandled[key].GetSetThread = new Thread(() =>
+                        this._cacheKeysBeingHandled[key].GetSetOperation.Thread = new Thread(() =>
                         {
                             var aborted = false;
                             var success = false;
@@ -53,7 +53,7 @@ namespace MemoryCacheHelper
                             {
                                 if (aborted)
                                 {
-                                    value = (T)this._cacheKeysBeingHandled[key].Value; // cast should always be valid as this method is the only thing that sets it
+                                    value = (T)this._cacheKeysBeingHandled[key].GetSetOperation.Value; // cast should always be valid as this method is the only thing that sets it
                                 }
                                 else if (success)
                                 {
@@ -72,8 +72,8 @@ namespace MemoryCacheHelper
                             }
                         });
 
-                        this._cacheKeysBeingHandled[key].GetSetThread.Start();
-                        this._cacheKeysBeingHandled[key].GetSetThread.Join();
+                        this._cacheKeysBeingHandled[key].GetSetOperation.Thread.Start();
+                        this._cacheKeysBeingHandled[key].GetSetOperation.Thread.Join();
                     }
                 }
 

@@ -62,6 +62,8 @@
     <Compile Include="ExtendedMemoryCache_Remove.cs" />
     <Compile Include="ExtendedMemoryCache_Set.cs" />
     <Compile Include="ExtendedMemoryCache_Wipe.cs" />
+    <Compile Include="Models\GetSetOperation.cs" />
+    <Compile Include="Models\SetOperation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

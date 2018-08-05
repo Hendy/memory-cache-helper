@@ -20,44 +20,44 @@ namespace MemoryCacheHelper
 
             this._cacheKeysBeingHandled.TryAdd(key, new CacheKeyBeingHandled());
 
-            lock (this._cacheKeysBeingHandled[key].SetLock)
+            lock (this._cacheKeysBeingHandled[key].SetOperation.Lock)
             {
-                this._cacheKeysBeingHandled[key].SetThreadCounter++;
+                this._cacheKeysBeingHandled[key].SetOperation.Counter ++;
             }
 
-            lock (this._cacheKeysBeingHandled[key].SetLock)
+            lock (this._cacheKeysBeingHandled[key].SetOperation.Lock)
             {
-                if (this._cacheKeysBeingHandled[key].SetThread != null)
+                if (this._cacheKeysBeingHandled[key].SetOperation.Thread != null)
                 {
                     try
                     {
-                        this._cacheKeysBeingHandled[key].SetThread.Abort();
+                        this._cacheKeysBeingHandled[key].SetOperation.Thread.Abort();
                     }
                     finally
                     {
-                        this._cacheKeysBeingHandled[key].SetThread = null;
+                        this._cacheKeysBeingHandled[key].SetOperation.Thread = null;
                     }
                 }
             }
 
-            lock (_cacheKeysBeingHandled[key].SetLock)
+            lock (_cacheKeysBeingHandled[key].SetOperation.Lock)
             {
-                if (this._cacheKeysBeingHandled[key].SetThreadCounter > 1)
+                if (this._cacheKeysBeingHandled[key].SetOperation.Counter > 1)
                 {
-                    this._cacheKeysBeingHandled[key].SetThreadCounter--;
+                    this._cacheKeysBeingHandled[key].SetOperation.Counter --;
                 }
             }
 
-            if (this._cacheKeysBeingHandled[key].SetThreadCounter > 1)
+            if (this._cacheKeysBeingHandled[key].SetOperation.Counter > 1)
             {
                 return; // it's not the most recent thread, so ignore it
             }
 
-            lock (_cacheKeysBeingHandled[key].SetLock)
+            lock (_cacheKeysBeingHandled[key].SetOperation.Lock)
             { 
-                if (this._cacheKeysBeingHandled[key].SetThread == null)
+                if (this._cacheKeysBeingHandled[key].SetOperation.Thread == null)
                 {
-                    this._cacheKeysBeingHandled[key].SetThread = new Thread(() =>
+                    this._cacheKeysBeingHandled[key].SetOperation.Thread = new Thread(() =>
                     {
                         try
                         {
@@ -73,8 +73,8 @@ namespace MemoryCacheHelper
                         }
                     });
 
-                    this._cacheKeysBeingHandled[key].SetThread.Start();
-                    this._cacheKeysBeingHandled[key].SetThread.Join();
+                    this._cacheKeysBeingHandled[key].SetOperation.Thread.Start();
+                    this._cacheKeysBeingHandled[key].SetOperation.Thread.Join();
                 }
             }
         }
@@ -96,13 +96,13 @@ namespace MemoryCacheHelper
                 // if there's currently a function opterating on this key
                 if (this._cacheKeysBeingHandled.TryGetValue(key, out CacheKeyBeingHandled cacheKeyBeingHandled))
                 {
-                    cacheKeyBeingHandled.SetThread?.Abort();
+                    cacheKeyBeingHandled.SetOperation.Thread?.Abort();
 
                     // if it wants the same type, then cancel it and give it this value
-                    if (cacheKeyBeingHandled.GetSetType == value.GetType())
+                    if (cacheKeyBeingHandled.GetSetOperation.Type == value.GetType())
                     {
-                        cacheKeyBeingHandled.Value = value;
-                        cacheKeyBeingHandled.GetSetThread.Abort();
+                        cacheKeyBeingHandled.GetSetOperation.Value = value;
+                        cacheKeyBeingHandled.GetSetOperation.Thread.Abort();
                     }
                 }
             }
