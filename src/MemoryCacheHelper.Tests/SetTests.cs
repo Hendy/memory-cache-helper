@@ -78,7 +78,7 @@ namespace MemoryCacheHelper.Tests
             {
                 ExtendedMemoryCache.Instance.Set("key", () =>
                 {
-                    Thread.Sleep(500);
+                    Thread.Sleep(250);
                     return x;
                 });
             });
@@ -90,7 +90,26 @@ namespace MemoryCacheHelper.Tests
                 () => slowSet("delta"),
                 () => slowSet("echo"),
                 () => slowSet("foxtrot"),
-                () => slowSet("golf"));
+                () => slowSet("golf"),
+                () => slowSet("hotel"),
+                () => slowSet("india"),
+                () => slowSet("juliett"),
+                () => slowSet("kilo"),
+                () => slowSet("lima"),
+                () => slowSet("mike"),
+                () => slowSet("november"),
+                () => slowSet("oscar"),
+                () => slowSet("papa"),
+                () => slowSet("qubec"),
+                () => slowSet("romeo"),
+                () => slowSet("sierra"),
+                () => slowSet("tango"),
+                () => slowSet("uniform"),
+                () => slowSet("victor"),
+                () => slowSet("whiskey"),
+                () => slowSet("xray"),
+                () => slowSet("yankee"),
+                () => slowSet("zulu"));
 
             ExtendedMemoryCache.Instance.Set("key", () => "last");
 

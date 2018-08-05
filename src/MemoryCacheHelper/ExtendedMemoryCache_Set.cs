@@ -20,7 +20,10 @@ namespace MemoryCacheHelper
 
             this._cacheKeysBeingHandled.TryAdd(key, new CacheKeyBeingHandled());
 
-            this._cacheKeysBeingHandled[key].SetThreadCounter++;
+            lock (this._cacheKeysBeingHandled[key].SetLock)
+            {
+                this._cacheKeysBeingHandled[key].SetThreadCounter++;
+            }
 
             lock (this._cacheKeysBeingHandled[key].SetLock)
             {
@@ -47,7 +50,7 @@ namespace MemoryCacheHelper
 
             if (this._cacheKeysBeingHandled[key].SetThreadCounter > 1)
             {
-                return;
+                return; // it's not the most recent thread, so ignore it
             }
 
             lock (_cacheKeysBeingHandled[key].SetLock)
