@@ -18,6 +18,14 @@ namespace MemoryCacheHelper.Tests
         public void Remove_Unknown_Key()
         {
             ExtendedMemoryCache.Instance.Remove("key");
+
+            Assert.IsFalse(ExtendedMemoryCache.Instance.HasKey("key"));
+        }
+
+        [TestMethod]
+        public void Remove_Null_Key()
+        {
+            ExtendedMemoryCache.Instance.Remove((string)null);            
         }
 
         [TestMethod]

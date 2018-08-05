@@ -29,7 +29,7 @@ namespace MemoryCacheHelper
         /// <param name="key">the key to the item to remove</param>
         public void Remove(string key)
         {
-            if (this._isWiping) { return; }
+            if (this._isWiping || key == null) { return; }
 
             ((IMemoryCacheDirect)this).Remove(key);
         }
@@ -40,6 +40,8 @@ namespace MemoryCacheHelper
         /// <param name="key">key of cache item to remove</param>
         void IMemoryCacheDirect.Remove(string key)
         {
+            if (key == null) { return; }
+
             this._memoryCache.Remove(key);
         }
     }
