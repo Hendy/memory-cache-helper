@@ -74,37 +74,27 @@ namespace MemoryCacheHelper.Tests
         [TestMethod]
         public void Last_Set_Function_Should_Win()
         {
-            var finished = false;
-
             var slowSet = new Action<string>((x) =>
             {
-                Task.Run(() =>
+                ExtendedMemoryCache.Instance.Set("key", () =>
                 {
-                    ExtendedMemoryCache.Instance.Set("key", () =>
-                    {
-                        Thread.Sleep(100);
-                        return x;
-                    });
-
-                    if (x == "fifth")
-                    {
-                        finished = true;
-                    }
+                    Thread.Sleep(500);
+                    return x;
                 });
             });
 
-            slowSet("first");
-            slowSet("second");
-            slowSet("third");
-            slowSet("fourth");
-            slowSet("fifth");
+            Parallel.Invoke(
+                () => slowSet("alpha"), 
+                () => slowSet("bravo"),
+                () => slowSet("charlie"),
+                () => slowSet("delta"),
+                () => slowSet("echo"),
+                () => slowSet("foxtrot"),
+                () => slowSet("golf"));
 
-            if (!SpinWait.SpinUntil(() => finished, 3000))
-            {
-                Assert.Inconclusive();
-            }
+            ExtendedMemoryCache.Instance.Set("key", () => "last");
 
-            Assert.AreEqual("fifth", ExtendedMemoryCache.Instance.Get<string>("key"));
+            Assert.AreEqual("last", ExtendedMemoryCache.Instance.Get<string>("key"));
         }
     }
 }

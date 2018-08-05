@@ -16,42 +16,64 @@ namespace MemoryCacheHelper
         /// <param name="policy">(Optional) An object that contains eviction details for the cache entry</param>
         public void Set(string key, Func<object> valueFunction, CacheItemPolicy policy = null)
         {
-            if (key == null || valueFunction == null ) { return; }
+            if (key == null || valueFunction == null) { return; }
 
             this._cacheKeysBeingHandled.TryAdd(key, new CacheKeyBeingHandled());
 
-            // abort any existing set function on this key
-            this._cacheKeysBeingHandled[key].SetThread?.Abort();
+            this._cacheKeysBeingHandled[key].SetThreadCounter++;
 
             lock (this._cacheKeysBeingHandled[key].SetLock)
             {
-                // wait until any previous has fully aborted
-                SpinWait.SpinUntil(() =>
-                {
-                    var threadState = this._cacheKeysBeingHandled[key].SetThread?.ThreadState;
-
-                    return threadState == null
-                        || threadState.Value == ThreadState.Aborted
-                        || threadState.Value == ThreadState.Stopped;
-                });
-
-                this._cacheKeysBeingHandled[key].SetThread = new Thread(() =>
+                if (this._cacheKeysBeingHandled[key].SetThread != null)
                 {
                     try
                     {
-                        object value = valueFunction();
-
-                        ((IMemoryCacheDirect)this).Set(key, value, policy);
+                        this._cacheKeysBeingHandled[key].SetThread.Abort();
                     }
-                    catch (ThreadAbortException)
+                    finally
                     {
+                        this._cacheKeysBeingHandled[key].SetThread = null;
                     }
-                });
-
-                this._cacheKeysBeingHandled[key].SetThread.Start();
-                this._cacheKeysBeingHandled[key].SetThread.Join();
+                }
             }
 
+            lock (_cacheKeysBeingHandled[key].SetLock)
+            {
+                if (this._cacheKeysBeingHandled[key].SetThreadCounter > 1)
+                {
+                    this._cacheKeysBeingHandled[key].SetThreadCounter--;
+                }
+            }
+
+            if (this._cacheKeysBeingHandled[key].SetThreadCounter > 1)
+            {
+                return;
+            }
+
+            lock (_cacheKeysBeingHandled[key].SetLock)
+            { 
+                if (this._cacheKeysBeingHandled[key].SetThread == null)
+                {
+                    this._cacheKeysBeingHandled[key].SetThread = new Thread(() =>
+                    {
+                        try
+                        {
+                            object value = valueFunction();
+
+                            ((IMemoryCacheDirect)this).Set(key, value, policy);
+                        }
+                        catch (ThreadAbortException)
+                        {
+                        }
+                        finally
+                        {
+                        }
+                    });
+
+                    this._cacheKeysBeingHandled[key].SetThread.Start();
+                    this._cacheKeysBeingHandled[key].SetThread.Join();
+                }
+            }
         }
 
         /// <summary>

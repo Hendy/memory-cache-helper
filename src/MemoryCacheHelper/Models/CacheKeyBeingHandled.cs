@@ -24,6 +24,12 @@ namespace MemoryCacheHelper.Models
         internal object SetLock { get; set; } = new object();
 
         /// <summary>
+        /// Used to count the number of threads being blocked whilst the last thread was being cancelled
+        /// This allows us to skip a number of threads, and have just the last one make create a new thread for its function
+        /// </summary>
+        internal int SetThreadCounter { get; set; } = 0;
+
+        /// <summary>
         /// A thread running a function to Set a cache item
         /// </summary>
         internal Thread SetThread { get; set; }
