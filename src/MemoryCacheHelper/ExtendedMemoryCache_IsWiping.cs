@@ -6,7 +6,7 @@
         /// Returns the current state
         /// </summary>
         /// <returns>Returns true if the wipe operation is currently being executed</returns>
-        public bool IsWiping()
+        internal bool IsWiping()
         {
             return this._isWiping;
         }

@@ -13,12 +13,14 @@ public string Name { get; }
 public CacheItemPolicy DefaultPolicy { set; }
 
 // If key not found, sets a cache item by key, function and optional eviction
+// Will be blocked if another valueFunction is already opertating on this key
 public void Add(string key, Func<object> valueFunction, CacheItemPolicy policy = null) {}
 
 // If key not found, sets a cache item by key, value and optional eviction
 public void Add(string, object value, CacheItemPolicy = null) {}
 
 // If key not found, sets a cache item by key, function and optional eviction
+// Will be blocked if another valueFunction is already opertating on this key
 public T AddOrGetExisting<T>(string key, Func<T> valueFunction, CacheItemPolicy policy = null) {}
 
 // If key not found, sets a cache item by key, value and optional eviction
@@ -45,6 +47,7 @@ internal long GetApproximateSize() {}
 public IEnumerable<string> GetKeys() {}
 
 // Attempts to get cache value of type T, otherwise sets a cache item by key, function and optional eviction
+// Will be blocked if another valueFunction is already opertating on this key
 public T GetSet<T>(string Key, Func<T> valueFunction, CacheItemPolicy = null) {}
 
 // Attempts to get cache value of type T, sets a cache item by key, value and optional eviction
@@ -66,6 +69,7 @@ public void Remove(Func<string, bool> keyFunction) {}
 public void Remove(string key) {}
 
 // Set a cache item by key, function and optional eviction
+
 public void Set(string key, Func<object> valueFunction, CacheItemPolicy policy = null) {}
 
 // Set a cache item by key, value and optional eviction
