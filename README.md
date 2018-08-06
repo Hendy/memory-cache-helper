@@ -2,6 +2,39 @@
 
 A singleton wrapper around System.Runtime.Caching.MemoryCache, providing thread-safe helper methods.
 
+## Example
+
+```csharp
+@using MemoryCacheHelper
+
+// a get or lazy set
+var myObject = SharedMemoryCache.Instance.GetSet<MyObject>("key", () => { 
+
+	// only the first thread on this key this will be executed
+	// other GetSet threads to this key will be blocked until this is complete or aborted
+	// this may be aborted if a direct set occurs on this this key before this is complete
+
+	return new MyObject();
+
+});
+
+// a lazy set
+SharedMemoryCache.Instance.Set<MyObject>("key", () => { 
+
+	// the most recent thread on this key will abort any previous ones
+	// this may be aborted if a direct set occurs on this this key before this is complete
+
+	return new MyOjbect();
+
+});
+
+// a direct set
+SharedMemoryCache.Instance.Set<MyObject>("key", new MyObject());
+
+```
+
+## API
+
 ```csharp
 // The singleton instance
 public static SharedMemoryCache Instance { get; }
