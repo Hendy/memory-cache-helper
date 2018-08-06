@@ -31,7 +31,7 @@ namespace MemoryCacheHelper.Tests
             {
                 var item = func(counter);
 
-                ExtendedMemoryCache.Instance.Set(item.Key, item.Value);
+                SharedMemoryCache.Instance.Set(item.Key, item.Value);
             }
         }
 
@@ -56,7 +56,7 @@ namespace MemoryCacheHelper.Tests
 
                     var item = func(counter);
 
-                    ExtendedMemoryCache.Instance.Set(item.Key, item.Value);
+                    SharedMemoryCache.Instance.Set(item.Key, item.Value);
                 }
             });
         }

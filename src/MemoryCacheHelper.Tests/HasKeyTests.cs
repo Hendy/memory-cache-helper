@@ -11,15 +11,15 @@ namespace MemoryCacheHelper.Tests
         [TestInitialize]
         public void Initialize()
         {
-            ExtendedMemoryCache.Instance.Wipe();
+            SharedMemoryCache.Instance.Wipe();
         }
 
         [TestMethod]
         public void Set_Null_Expect_HasKey_False()
         {
-            ExtendedMemoryCache.Instance.Set("key", null);
+            SharedMemoryCache.Instance.Set("key", null);
 
-            Assert.IsFalse(ExtendedMemoryCache.Instance.HasKey("key"));
+            Assert.IsFalse(SharedMemoryCache.Instance.HasKey("key"));
         }
 
         [TestMethod]
@@ -27,9 +27,9 @@ namespace MemoryCacheHelper.Tests
         {
             var value = true;
 
-            ExtendedMemoryCache.Instance.Set("key", value);
+            SharedMemoryCache.Instance.Set("key", value);
 
-            Assert.IsTrue(ExtendedMemoryCache.Instance.HasKey("key"));
+            Assert.IsTrue(SharedMemoryCache.Instance.HasKey("key"));
         }
     }
 }

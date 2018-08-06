@@ -1,15 +1,15 @@
 ﻿namespace MemoryCacheHelper
 {
-    public sealed partial class ExtendedMemoryCache
+    public sealed partial class SharedMemoryCache
     {
         /// <summary>
-        /// Determines whether a cache entry exists in the cache
+        /// See if the cache contains a specific cache key
         /// </summary>
         /// <param name="key">the cache key to look for</param>
         /// <returns>true if the supplied cache key was found</returns>
-        public bool Contains(string key)
+        public bool HasKey(string key)
         {
-            return this._memoryCache.Contains(key);
+            return this._memoryCache[key] != null;
         }
     }
 }

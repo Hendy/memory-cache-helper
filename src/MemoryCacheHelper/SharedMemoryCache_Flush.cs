@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace MemoryCacheHelper
 {
-    public sealed partial class ExtendedMemoryCache
+    public sealed partial class SharedMemoryCache
     {
         /// <summary>
         /// Flush will remove all cache entries, but not block any set operations

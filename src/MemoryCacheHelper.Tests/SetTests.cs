@@ -14,15 +14,15 @@ namespace MemoryCacheHelper.Tests
         [TestInitialize]
         public void Initialize()
         {
-            ExtendedMemoryCache.Instance.Wipe();
+            SharedMemoryCache.Instance.Wipe();
         }
 
         [TestMethod]
         public void Set_Null_Key()
         {
-            ExtendedMemoryCache.Instance.Set((string)null, true);
+            SharedMemoryCache.Instance.Set((string)null, true);
 
-            Assert.IsTrue(ExtendedMemoryCache.Instance.IsEmpty());
+            Assert.IsTrue(SharedMemoryCache.Instance.IsEmpty());
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace MemoryCacheHelper.Tests
 
             Task.Run(() =>
             {
-                output = ExtendedMemoryCache.Instance.AddOrGetExisting("key", () =>
+                output = SharedMemoryCache.Instance.AddOrGetExisting("key", () =>
                 {
                     started = true;
 
@@ -59,13 +59,13 @@ namespace MemoryCacheHelper.Tests
                 Assert.IsTrue(started);
 
                 // there shouldn't be an item, as the infinite loop prevents the set
-                Assert.IsFalse(ExtendedMemoryCache.Instance.HasKey("key"));
+                Assert.IsFalse(SharedMemoryCache.Instance.HasKey("key"));
 
                 // immediately set the cache item, cancelling the infinite loop
-                ExtendedMemoryCache.Instance.Set("key", "cancel");
+                SharedMemoryCache.Instance.Set("key", "cancel");
 
-                Assert.IsTrue(ExtendedMemoryCache.Instance.HasKey("key"));
-                Assert.AreEqual("cancel", ExtendedMemoryCache.Instance.Get<string>("key"));
+                Assert.IsTrue(SharedMemoryCache.Instance.HasKey("key"));
+                Assert.AreEqual("cancel", SharedMemoryCache.Instance.Get<string>("key"));
 
                 // wait for the cancelled task to finish
                 if (!SpinWait.SpinUntil(() => finished, 100))
@@ -84,7 +84,7 @@ namespace MemoryCacheHelper.Tests
         {
             var slowSet = new Action<string>((x) =>
             {
-                ExtendedMemoryCache.Instance.Set("key", () =>
+                SharedMemoryCache.Instance.Set("key", () =>
                 {
                     Thread.Sleep(250);
                     return x;
@@ -119,9 +119,9 @@ namespace MemoryCacheHelper.Tests
                 () => slowSet("yankee"),
                 () => slowSet("zulu"));
 
-            ExtendedMemoryCache.Instance.Set("key", () => "last");
+            SharedMemoryCache.Instance.Set("key", () => "last");
 
-            Assert.AreEqual("last", ExtendedMemoryCache.Instance.Get<string>("key"));
+            Assert.AreEqual("last", SharedMemoryCache.Instance.Get<string>("key"));
         }
     }
 }

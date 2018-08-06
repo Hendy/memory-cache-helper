@@ -13,25 +13,25 @@ namespace MemoryCacheHelper.Tests
         [TestInitialize]
         public void Initialize()
         {
-            ExtendedMemoryCache.Instance.Wipe();
+            SharedMemoryCache.Instance.Wipe();
         }
 
         [TestMethod]
         public void Remove_Unknown_Key()
         {
-            ExtendedMemoryCache.Instance.Remove("key");
+            SharedMemoryCache.Instance.Remove("key");
         }
 
         [TestMethod]
         public void Remove_Null_Key()
         {
-            ExtendedMemoryCache.Instance.Remove((string)null);
+            SharedMemoryCache.Instance.Remove((string)null);
         }
 
         [TestMethod]
         public void Remove_Whitespace_Key()
         {
-            ExtendedMemoryCache.Instance.Remove("");
+            SharedMemoryCache.Instance.Remove("");
         }
 
         [TestMethod]
@@ -39,12 +39,12 @@ namespace MemoryCacheHelper.Tests
         {
             TestHelper.Populate(100, x => { return new KeyValuePair<string, object>("key" + x.ToString(), true); });
 
-            Assert.IsFalse(ExtendedMemoryCache.Instance.IsEmpty());
-            Assert.AreEqual(100, ExtendedMemoryCache.Instance.GetKeys().Count());
+            Assert.IsFalse(SharedMemoryCache.Instance.IsEmpty());
+            Assert.AreEqual(100, SharedMemoryCache.Instance.GetKeys().Count());
 
-            ExtendedMemoryCache.Instance.Remove(x => x.StartsWith("key"));
+            SharedMemoryCache.Instance.Remove(x => x.StartsWith("key"));
 
-            Assert.IsTrue(ExtendedMemoryCache.Instance.IsEmpty());
+            Assert.IsTrue(SharedMemoryCache.Instance.IsEmpty());
         }
     }
 }

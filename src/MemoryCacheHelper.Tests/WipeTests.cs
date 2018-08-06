@@ -13,15 +13,15 @@ namespace MemoryCacheHelper.Tests
         [TestInitialize]
         public void Initialize()
         {
-            ExtendedMemoryCache.Instance.Wipe();
+            SharedMemoryCache.Instance.Wipe();
         }
 
         [TestMethod]
         public void Empty_Wipe()
         {
-            ExtendedMemoryCache.Instance.Wipe();
+            SharedMemoryCache.Instance.Wipe();
 
-            Assert.IsTrue(ExtendedMemoryCache.Instance.IsEmpty());
+            Assert.IsTrue(SharedMemoryCache.Instance.IsEmpty());
         }
 
         [TestMethod]
@@ -29,11 +29,11 @@ namespace MemoryCacheHelper.Tests
         {
             TestHelper.Populate(1000);
 
-            Assert.IsFalse(ExtendedMemoryCache.Instance.IsEmpty());
+            Assert.IsFalse(SharedMemoryCache.Instance.IsEmpty());
 
-            ExtendedMemoryCache.Instance.Wipe();
+            SharedMemoryCache.Instance.Wipe();
 
-            Assert.IsTrue(ExtendedMemoryCache.Instance.IsEmpty());
+            Assert.IsTrue(SharedMemoryCache.Instance.IsEmpty());
         }
 
         /// <summary>
@@ -44,18 +44,18 @@ namespace MemoryCacheHelper.Tests
         [TestMethod]
         public void Populating_Wipe()
         {
-            Assert.IsTrue(ExtendedMemoryCache.Instance.IsEmpty());
+            Assert.IsTrue(SharedMemoryCache.Instance.IsEmpty());
 
             TestHelper.Populate(5000);
 
-            Assert.IsFalse(ExtendedMemoryCache.Instance.IsEmpty());
-            Assert.AreEqual(5000, ExtendedMemoryCache.Instance.GetKeys().Count());
+            Assert.IsFalse(SharedMemoryCache.Instance.IsEmpty());
+            Assert.AreEqual(5000, SharedMemoryCache.Instance.GetKeys().Count());
 
             Parallel.Invoke(
-                () => ExtendedMemoryCache.Instance.Wipe(), 
+                () => SharedMemoryCache.Instance.Wipe(), 
                 () => TestHelper.Populate(1000));
 
-            Assert.AreEqual(1000, ExtendedMemoryCache.Instance.GetKeys().Count());
+            Assert.AreEqual(1000, SharedMemoryCache.Instance.GetKeys().Count());
         }
     }
 }

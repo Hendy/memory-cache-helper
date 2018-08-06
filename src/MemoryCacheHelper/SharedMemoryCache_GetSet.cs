@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace MemoryCacheHelper
 {
-    public sealed partial class ExtendedMemoryCache
+    public sealed partial class SharedMemoryCache
     {
         /// <summary>
         /// Attempts to get cache value of type T, otherwise sets a cache item by key, function and optional eviction

@@ -1,6 +1,6 @@
 ﻿namespace MemoryCacheHelper
 {
-    public sealed partial class ExtendedMemoryCache
+    public sealed partial class SharedMemoryCache
     {
         /// <summary>
         /// The unique name of this memory cache

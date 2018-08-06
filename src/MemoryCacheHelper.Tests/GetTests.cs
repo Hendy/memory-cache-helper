@@ -11,7 +11,7 @@ namespace MemoryCacheHelper.Tests
         [TestInitialize]
         public void Initialize()
         {
-            ExtendedMemoryCache.Instance.Wipe();
+            SharedMemoryCache.Instance.Wipe();
         }
 
         [TestMethod]
@@ -19,7 +19,7 @@ namespace MemoryCacheHelper.Tests
         {
             var found = false;
 
-            var output = ExtendedMemoryCache.Instance.Get<string>("key", out found);
+            var output = SharedMemoryCache.Instance.Get<string>("key", out found);
 
             Assert.IsFalse(found);
 
@@ -31,9 +31,9 @@ namespace MemoryCacheHelper.Tests
         {
             var input = "hello world";
 
-            ExtendedMemoryCache.Instance.Set("key", input);
+            SharedMemoryCache.Instance.Set("key", input);
 
-            var output = ExtendedMemoryCache.Instance.Get<string>("key");
+            var output = SharedMemoryCache.Instance.Get<string>("key");
 
             Assert.AreEqual(input, output);
         }

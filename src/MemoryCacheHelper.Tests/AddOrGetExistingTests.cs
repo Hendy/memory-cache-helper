@@ -13,7 +13,7 @@ namespace MemoryCacheHelper.Tests
         [TestInitialize]
         public void Initialize()
         {
-            ExtendedMemoryCache.Instance.Wipe();
+            SharedMemoryCache.Instance.Wipe();
         }
 
         [TestMethod]
@@ -21,7 +21,7 @@ namespace MemoryCacheHelper.Tests
         {
             var input = "hello world";
 
-            var output = ExtendedMemoryCache.Instance.AddOrGetExisting<string>("key", () => input);
+            var output = SharedMemoryCache.Instance.AddOrGetExisting<string>("key", () => input);
 
             Assert.AreEqual(input, output);
         }
@@ -36,7 +36,7 @@ namespace MemoryCacheHelper.Tests
             var started = false;
 
             Task.Run(() => {
-                output = ExtendedMemoryCache.Instance.AddOrGetExisting("key", () => {
+                output = SharedMemoryCache.Instance.AddOrGetExisting("key", () => {
                     started = true;
                     Thread.Sleep(250);
                     return "first";
@@ -52,9 +52,9 @@ namespace MemoryCacheHelper.Tests
                 Assert.IsTrue(started);
 
                 // this should be blocked, so it's value should not be set
-                ExtendedMemoryCache.Instance.AddOrGetExisting("key", () => "second");
+                SharedMemoryCache.Instance.AddOrGetExisting("key", () => "second");
 
-                Assert.AreEqual("first", ExtendedMemoryCache.Instance.Get<string>("key"));
+                Assert.AreEqual("first", SharedMemoryCache.Instance.Get<string>("key"));
                 Assert.AreEqual("first", output);
             }
         }

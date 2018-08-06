@@ -4,7 +4,7 @@ A singleton wrapper around System.Runtime.Caching.MemoryCache, providing thread-
 
 ```csharp
 // The singleton instance
-public static ExtendedMemoryCache Instance { get; }
+public static SharedMemoryCache Instance { get; }
 
 // Unique name of wrapped memory cache
 public string Name { get; }

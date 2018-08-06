@@ -6,12 +6,12 @@ using System.Runtime.Caching;
 
 namespace MemoryCacheHelper
 {
-    public sealed partial class ExtendedMemoryCache : IMemoryCacheDirect
+    public sealed partial class SharedMemoryCache : IMemoryCacheDirect
     {
         /// <summary>
-        /// Singleton instance of the <see cref="ExtendedMemoryCache"/> class
+        /// Singleton instance of the <see cref="SharedMemoryCache"/> class
         /// </summary>
-        private static readonly Lazy<ExtendedMemoryCache> _lazy = new Lazy<ExtendedMemoryCache>(() => new ExtendedMemoryCache());
+        private static readonly Lazy<SharedMemoryCache> _lazy = new Lazy<SharedMemoryCache>(() => new SharedMemoryCache());
 
         /// <summary>
         /// The wrapped memory cache

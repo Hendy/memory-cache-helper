@@ -7,12 +7,12 @@ namespace MemoryCacheHelper
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class ExtendedMemoryCache
+    public sealed partial class SharedMemoryCache
     {
         /// <summary>
         /// Private constructor
         /// </summary>
-        private ExtendedMemoryCache()
+        private SharedMemoryCache()
         {
             this._memoryCache = new System.Runtime.Caching.MemoryCache(Guid.NewGuid().ToString());
 
@@ -22,6 +22,6 @@ namespace MemoryCacheHelper
         /// <summary>
         /// Get the instance of this cache
         /// </summary>
-        public static ExtendedMemoryCache Instance => _lazy.Value;
+        public static SharedMemoryCache Instance => _lazy.Value;
     }
 }

@@ -13,20 +13,20 @@ namespace MemoryCacheHelper.Tests
         [TestInitialize]
         public void Initialize()
         {
-            ExtendedMemoryCache.Instance.Wipe();
+            SharedMemoryCache.Instance.Wipe();
         }
 
         [TestMethod]
         public void Fill_And_See_GetApproxiateSize_Increase()
         {
-            long oldSize = ExtendedMemoryCache.Instance.GetApproximateSize();
+            long oldSize = SharedMemoryCache.Instance.GetApproximateSize();
             long newSize = oldSize;
             
             if (SpinWait.SpinUntil(() => {
 
-                ExtendedMemoryCache.Instance.Set(Guid.NewGuid().ToString(), DateTime.Now);
+                SharedMemoryCache.Instance.Set(Guid.NewGuid().ToString(), DateTime.Now);
 
-                newSize = ExtendedMemoryCache.Instance.GetApproximateSize();
+                newSize = SharedMemoryCache.Instance.GetApproximateSize();
 
                 Assert.IsTrue(newSize >= oldSize);
 
