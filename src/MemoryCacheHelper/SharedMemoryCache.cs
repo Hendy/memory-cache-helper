@@ -24,7 +24,7 @@ namespace MemoryCacheHelper
         public CacheItemPolicy DefaultPolicy { get; set; } = null;
 
         /// <summary>
-        /// Locker collection of all cache keys currently executing a function to set a cache item
+        /// Collection of all cache keys currently executing a function to set a cache item
         /// </summary>
         private ConcurrentDictionary<string, CacheKeyBeingHandled> _cacheKeysBeingHandled;
 

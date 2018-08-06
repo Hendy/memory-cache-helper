@@ -6,12 +6,12 @@
     internal class CacheKeyBeingHandled
     {
         /// <summary>
-        /// State of a GetGet operation on this key
+        /// State of a GetGet operation acting on this key
         /// </summary>
         internal GetSetOperation GetSetOperation { get; } = new GetSetOperation();
 
         /// <summary>
-        /// State of a Set operation on this key
+        /// State of a Set operation acting on this key
         /// </summary>
         internal SetOperation SetOperation { get; } = new SetOperation();
     }
